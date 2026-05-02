@@ -1,11 +1,16 @@
 import { signIn } from "@/lib/auth";
 import { LoginButton } from "./LoginButton";
 
+const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
+
 async function loginAction(formData: FormData) {
   "use server";
   const email = String(formData.get("email") || "").trim();
   if (!email.includes("@")) return;
-  await signIn("nodemailer", { email, redirectTo: "/kataloghub" });
+  await signIn("nodemailer", {
+    email,
+    redirectTo: `${APP_BASE_PATH}/kataloghub`,
+  });
 }
 
 export default function LoginPage() {
