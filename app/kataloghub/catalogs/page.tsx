@@ -30,7 +30,7 @@ export default function CatalogListPage() {
     <>
       <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">Kataloger</h1>
+          <h1 className="text-3xl font-bold uppercase">Kataloger</h1>
           <p className="mt-1 text-sm text-text-muted">
             Översikt över alla kataloger och senaste skanning.
           </p>

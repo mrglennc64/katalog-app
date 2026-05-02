@@ -23,18 +23,17 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside
-      className="w-60 shrink-0 p-4 text-white"
-      style={{ background: "var(--kh-nav-bg)" }}
-    >
+    <aside className="w-60 shrink-0 border-r border-border bg-bg p-4">
       <div className="mb-4 flex items-center justify-between px-3">
-        <span className="text-base font-semibold tracking-wide">Kataloghub</span>
-        <span className="inline-flex gap-1 rounded-full border border-white/20 p-0.5 text-[10px] font-bold">
-          <span className="rounded-full bg-white/20 px-2 py-0.5 text-white">SV</span>
-          <span className="px-2 py-0.5 text-white/50">EN</span>
+        <span className="text-base font-semibold tracking-wide text-text">
+          Kataloghub
+        </span>
+        <span className="inline-flex gap-0.5 rounded-full border border-border p-0.5 text-[10px] font-bold">
+          <span className="rounded-full bg-kh-orange px-2 py-0.5 text-white">SV</span>
+          <span className="px-2 py-0.5 text-text-muted">EN</span>
         </span>
       </div>
-      <nav className="flex flex-col gap-1">
+      <nav className="flex flex-col gap-0.5">
         {NAV.map((item) => {
           const active = item.exact
             ? pathname === item.href
@@ -45,8 +44,8 @@ export function Sidebar() {
               href={item.href}
               className={`block rounded px-3 py-2 text-sm transition-colors ${
                 active
-                  ? "bg-kh-green text-white"
-                  : "text-white/90 hover:bg-white/10"
+                  ? "bg-kh-orange/10 font-semibold text-kh-orange-dark"
+                  : "text-text hover:bg-surface"
               }`}
             >
               {item.label}
@@ -54,7 +53,7 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <div className="mt-8 px-3 text-[11px] leading-relaxed text-white/60">
+      <div className="mt-8 px-3 text-[11px] leading-relaxed text-text-muted">
         Filbaserat · Ingen systemåtkomst · Ingen ingestion
       </div>
     </aside>

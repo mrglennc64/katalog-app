@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Card } from "@/app/components/Card";
+import { StepIndicator, PIPELINE_STEPS } from "@/app/components/StepIndicator";
 
 type Row = {
   work_id: string;
@@ -541,8 +542,10 @@ export default function UploadPage() {
 
   return (
     <>
+      <StepIndicator steps={PIPELINE_STEPS} current={1} />
+
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Ladda upp katalog</h1>
+        <h1 className="text-3xl font-bold uppercase">Ladda upp katalog</h1>
         <p className="mt-1 text-sm text-text-muted">
           Filbaserad kontroll av struktur, identifierare och format. Ingen integration. Ingen automatisering.
         </p>

@@ -29,19 +29,19 @@ export default function BillingPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Fakturering</h1>
+        <h1 className="text-3xl font-bold uppercase">Fakturering</h1>
         <p className="mt-1 text-sm text-text-muted">Pris per skanning och historik.</p>
       </header>
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card title="Pris per skanning">
-          <p className="text-2xl font-semibold text-text">{fmtSEK(data.pricePerScan)}</p>
+          <p className="text-3xl font-bold uppercase text-text">{fmtSEK(data.pricePerScan)}</p>
         </Card>
         <Card title="Antal skanningar">
-          <p className="text-2xl font-semibold text-text">{data.totalScans}</p>
+          <p className="text-3xl font-bold uppercase text-text">{data.totalScans}</p>
         </Card>
         <Card title="Totalt">
-          <p className="text-2xl font-semibold text-text">{fmtSEK(total)}</p>
+          <p className="text-3xl font-bold uppercase text-text">{fmtSEK(total)}</p>
         </Card>
       </section>
 

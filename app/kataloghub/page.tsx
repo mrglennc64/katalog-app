@@ -28,7 +28,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Välkommen</h1>
+        <h1 className="text-3xl font-bold uppercase">Välkommen</h1>
         <p className="mt-1 text-sm text-text-muted">Laddar…</p>
       </header>
     );
@@ -38,7 +38,7 @@ export default function DashboardPage() {
     return (
       <>
         <header className="mb-6">
-          <h1 className="text-2xl font-semibold">Välkommen</h1>
+          <h1 className="text-3xl font-bold uppercase">Välkommen</h1>
           <p className="mt-1 text-sm text-text-muted">
             Filbaserad validering av katalogmetadata. Ingen systemåtkomst. Ingen ingestion.
           </p>
@@ -57,7 +57,7 @@ export default function DashboardPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Välkommen</h1>
+        <h1 className="text-3xl font-bold uppercase">Välkommen</h1>
         <p className="mt-1 text-sm text-text-muted">
           {data.companyName} · {data.orgnr}
         </p>

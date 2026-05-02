@@ -80,7 +80,7 @@ export default function EditCatalogPage({
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Redigera katalog</h1>
+        <h1 className="text-3xl font-bold uppercase">Redigera katalog</h1>
         <p className="mt-1 font-mono text-xs text-text-muted">{id}</p>
       </header>
 

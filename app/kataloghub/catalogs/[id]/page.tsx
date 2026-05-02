@@ -31,7 +31,7 @@ export default function CatalogDetailPage({
     <>
       <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">{data.name}</h1>
+          <h1 className="text-3xl font-bold uppercase">{data.name}</h1>
           <p className="mt-1 font-mono text-xs text-text-muted">{data.id}</p>
         </div>
         <div className="flex flex-wrap gap-2">

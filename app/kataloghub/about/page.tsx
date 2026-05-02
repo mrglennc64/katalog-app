@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Validering &amp; Korrigering</h1>
+        <h1 className="text-3xl font-bold uppercase">Validering &amp; Korrigering</h1>
         <p className="mt-1 text-sm text-text-muted">
           Två tjänster, separata steg, publicisten styr överlämningen.
         </p>

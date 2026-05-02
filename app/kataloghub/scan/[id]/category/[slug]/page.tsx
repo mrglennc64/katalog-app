@@ -39,7 +39,7 @@ export default function CategoryPage({
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Kategori: {data.categoryName}</h1>
+        <h1 className="text-3xl font-bold uppercase">Kategori: {data.categoryName}</h1>
         {data.description && (
           <p className="mt-1 text-sm text-text-muted">{data.description}</p>
         )}

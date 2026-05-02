@@ -13,7 +13,7 @@ export default async function WorksheetEditorPage({
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Arbetsblad</h1>
+        <h1 className="text-3xl font-bold uppercase">Arbetsblad</h1>
         <p className="mt-1 text-sm text-text-muted">
           Katalog {id} · {rows.length} avvikelser. Bekräfta eller avslå varje
           föreslagen korrigering. Skicka det ifyllda arbetsbladet till HeyRoya.

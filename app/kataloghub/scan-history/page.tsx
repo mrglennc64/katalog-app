@@ -4,7 +4,7 @@ export default function ScanHistoryRedirect() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Skanningshistorik</h1>
+        <h1 className="text-3xl font-bold uppercase">Skanningshistorik</h1>
       </header>
       <p className="text-sm text-text-muted">
         Den här sidan har flyttats.{" "}

@@ -15,6 +15,7 @@ type ScanData = {
 };
 
 import { apiFetcher, apiUrl } from "@/lib/api";
+import { StepIndicator, PIPELINE_STEPS } from "@/app/components/StepIndicator";
 
 export default function ScanResultPage({
   params,
@@ -35,8 +36,10 @@ export default function ScanResultPage({
 
   return (
     <>
+      <StepIndicator steps={PIPELINE_STEPS} current={2} />
+
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Scan-resultat</h1>
+        <h1 className="text-3xl font-bold uppercase">Scan-resultat</h1>
         <p className="mt-1 font-mono text-xs text-text-muted">
           Scan-ID: {data.scan_id} · Skapad {data.timestamp}
         </p>

@@ -7,7 +7,7 @@ export default function ScanFailedPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Skanningen misslyckades</h1>
+        <h1 className="text-3xl font-bold uppercase">Skanningen misslyckades</h1>
         <p className="mt-1 text-sm text-text-muted">
           Filen kunde inte bearbetas. Kontrollera att den uppfyller kraven nedan.
         </p>

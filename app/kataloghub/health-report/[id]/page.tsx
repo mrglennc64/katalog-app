@@ -18,6 +18,7 @@ type HealthReport = {
 };
 
 import { apiFetcher } from "@/lib/api";
+import { StepIndicator, PIPELINE_STEPS } from "@/app/components/StepIndicator";
 
 function statusClass(s: string) {
   if (s === "ok") return "border-kh-green/40 bg-kh-green/10 text-kh-green";
@@ -44,8 +45,10 @@ export default function HealthReportPage({
 
   return (
     <>
+      <StepIndicator steps={PIPELINE_STEPS} current={3} />
+
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Hälsorapport</h1>
+        <h1 className="text-3xl font-bold uppercase">Hälsorapport</h1>
         <p className="mt-1 font-mono text-xs text-text-muted">Scan-ID: {id}</p>
       </header>
 

@@ -21,7 +21,7 @@ export default function CommonIssuesPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Vanligaste problemen</h1>
+        <h1 className="text-3xl font-bold uppercase">Vanligaste problemen</h1>
         <p className="mt-1 text-sm text-text-muted">
           Återkommande metadataproblem över alla skanningar.
         </p>

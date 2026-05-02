@@ -14,6 +14,7 @@ type WorksheetRow = {
 };
 
 import { apiFetcher, apiUrl } from "@/lib/api";
+import { StepIndicator, PIPELINE_STEPS } from "@/app/components/StepIndicator";
 
 const HEYROYA_URL =
   process.env.NEXT_PUBLIC_HEYROYA_URL || "https://heyroya.se/queue";
@@ -34,8 +35,10 @@ export default function WorksheetPage({
 
   return (
     <>
+      <StepIndicator steps={PIPELINE_STEPS} current={4} />
+
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Arbetsblad</h1>
+        <h1 className="text-3xl font-bold uppercase">Arbetsblad</h1>
         <p className="mt-1 text-sm text-text-muted">
           Detta är underlaget som publicisten ska arbeta med.
         </p>

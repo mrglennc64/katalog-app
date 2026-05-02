@@ -17,7 +17,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-bg p-6">
       <div className="mx-auto max-w-sm rounded-lg border border-border bg-bg p-6 shadow-sm">
-        <h1 className="mb-1 text-2xl font-semibold text-text">Logga in</h1>
+        <h1 className="mb-1 text-3xl font-bold uppercase text-text">Logga in</h1>
         <p className="mb-4 text-sm text-text-muted">
           Vi skickar en inloggningslänk till din e-post.
         </p>
