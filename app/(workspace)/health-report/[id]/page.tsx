@@ -5,6 +5,7 @@ import { CwrReadyBadge } from "@/app/components/CwrReadyBadge";
 import { BeforeAfterTabs } from "@/app/components/BeforeAfterTabs";
 import { FixInSourceSystem } from "@/app/components/FixInSourceSystem";
 import { ValidationVsCorrection } from "@/app/components/ValidationVsCorrection";
+import { ScoreNumber } from "@/app/components/ScoreNumber";
 import { mockHealthReport } from "@/lib/mock";
 
 export default async function HealthReportPage({
@@ -33,12 +34,7 @@ export default async function HealthReportPage({
 
       <section className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card title="Score">
-          <p className="text-3xl font-semibold text-text">
-            {report.score}{" "}
-            <span className="text-base font-normal text-text-muted">
-              / 100
-            </span>
-          </p>
+          <ScoreNumber score={report.score} />
         </Card>
         <Card title="Blocking">
           <Pill tone={report.counts.blocking === 0 ? "green" : "red"}>

@@ -5,6 +5,7 @@ import { HowToFix } from "@/app/components/HowToFix";
 import { NextSteps } from "@/app/components/NextSteps";
 import { CwrReadyBadge } from "@/app/components/CwrReadyBadge";
 import { FixInSourceSystem } from "@/app/components/FixInSourceSystem";
+import { ScoreNumber } from "@/app/components/ScoreNumber";
 import { mockHealthReport } from "@/lib/mock";
 
 export default async function ScanResultPage({
@@ -33,12 +34,7 @@ export default async function ScanResultPage({
 
       <section className="mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card title="Score">
-          <p className="text-3xl font-semibold text-text">
-            {report.score}{" "}
-            <span className="text-base font-normal text-text-muted">
-              / 100
-            </span>
-          </p>
+          <ScoreNumber score={report.score} />
         </Card>
         <Card title="Blocking">
           <p>
