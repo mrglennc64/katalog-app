@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 const NAV: { href: string; label: string; exact?: boolean }[] = [
   { href: "/kataloghub", label: "Dashboard", exact: true },
   { href: "/kataloghub/upload", label: "Upload Catalog" },
-  { href: "/kataloghub/scan-history", label: "Scan History" },
+  { href: "/kataloghub/catalogs", label: "Catalogs" },
+  { href: "/kataloghub/scans", label: "Scan History" },
   { href: "/kataloghub/worksheets", label: "Worksheets" },
   { href: "/kataloghub/exports", label: "Exports" },
   { href: "/kataloghub/billing", label: "Billing" },
