@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<title>{{PartnerBrand}} — Validering av katalogfil</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Filbaserad kontroll av struktur, identifierare och format. Ingen integration. Ingen automatisering.">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    background: #050505;
+    color: #f5f5f5;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    margin: 0; padding: 0;
+    line-height: 1.55;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  header.topnav { max-width: 1100px; margin: 0 auto; padding: 18px 24px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid #222; }
+  .brand { display: flex; align-items: center; gap: 0.65rem; }
+  .brand-mark { width: 24px; height: 24px; border-radius: 999px; background: radial-gradient(circle at 30% 20%, #cfeed9 0, #1f7a3a 40%, #0c3f1d 100%); }
+  .brand-text { font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-size: 12px; color: #aaaaaa; }
+  nav.primary { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; font-size: 13px; color: #aaaaaa; }
+  nav.primary a:hover, nav.primary a.active { color: #ffffff; }
+  .lang-toggle { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; border: 1px solid #2a2a2a; margin-left: 12px; }
+  .lang-toggle a { color: #aaaaaa; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; margin: 0; }
+  .lang-toggle a.active { background: #1f7a3a; color: #ffffff; }
+  .lang-toggle a:hover:not(.active) { color: #ffffff; }
+
+  main { max-width: 880px; margin: 0 auto; padding: 0 24px 64px; }
+
+  section.hero { padding: 56px 0 24px; }
+  section.hero h1 { font-size: 28px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.01em; }
+  section.hero p.lede { color: #cccccc; font-size: 15px; margin: 0; }
+
+  section { padding: 24px 0; }
+  section.divider { border-top: 1px solid #222; }
+  section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; margin: 0 0 12px; }
+
+  .upload-card { background: #101010; border: 1px solid #222; border-radius: 6px; padding: 20px 22px; }
+  .upload-card p.req { font-size: 13px; color: #cccccc; margin: 0 0 16px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .upload-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .file-label { display: inline-block; padding: 8px 16px; border-radius: 4px; border: 1px solid #2f2f2f; background: #181818; color: #f5f5f5; cursor: pointer; font-size: 14px; }
+  .file-label:hover { border-color: #444; }
+  #file-name { font-size: 13px; color: #888; }
+  .btn-primary { display: inline-block; padding: 10px 22px; border-radius: 4px; background: #1f7a3a; border: 1px solid #1f7a3a; color: #ffffff; font-size: 14px; font-weight: 600; cursor: pointer; margin-left: auto; font-family: inherit; }
+  .btn-primary:hover:not(:disabled) { background: #249245; }
+  .btn-primary:disabled { background: #2a2a2a; border-color: #2a2a2a; color: #777; cursor: not-allowed; }
+
+  ul.checks { list-style: none; padding: 0; margin: 0; background: #101010; border: 1px solid #222; border-radius: 6px; }
+  ul.checks li { padding: 14px 20px 14px 44px; border-bottom: 1px solid #222; color: #cccccc; font-size: 14px; position: relative; }
+  ul.checks li:last-child { border-bottom: 0; }
+  ul.checks li::before { content: '·'; position: absolute; left: 22px; top: 11px; color: #1f7a3a; font-weight: 700; font-size: 22px; line-height: 1; }
+
+  .status { margin-top: 16px; padding: 14px 18px; border: 1px solid #222; border-radius: 6px; background: #101010; font-size: 13px; color: #cccccc; }
+  .status.error { border-color: #7a2828; color: #f3a3a3; }
+  .status.success { border-color: #1f7a3a; color: #b6e2c4; }
+  .status.blocked { border-color: #7a2828; color: #f3a3a3; }
+  .status .row { display: flex; justify-content: space-between; padding: 2px 0; }
+  .status .row strong { color: #ffffff; }
+  .status .code { display: inline-block; font-family: monospace; font-size: 11px; color: #aaaaaa; margin-left: 0.5rem; padding: 1px 8px; border: 1px solid #2f2f2f; border-radius: 999px; }
+
+  .actions { margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .issues-table { margin-top: 16px; background: #101010; border: 1px solid #222; border-radius: 6px; overflow: hidden; }
+  .issues-table .issues-header { padding: 12px 16px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; }
+  .issues-table .issues-header .count { color: #aaaaaa; font-family: monospace; }
+  .issues-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .issues-table th, .issues-table td { text-align: left; padding: 8px 14px; border-bottom: 1px solid #222; color: #cccccc; }
+  .issues-table tr:last-child td { border-bottom: 0; }
+  .issues-table th { background: #0a0a0a; font-size: 10px; color: #8f9bb3; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .issues-table td.wid { color: #6dbe85; font-family: monospace; font-size: 12px; }
+  .issues-table td.field { color: #6dbe85; font-family: monospace; font-size: 12px; }
+  .issues-table td.original { font-family: monospace; font-size: 12px; color: #aaaaaa; }
+  .issues-table .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: monospace; }
+  .issues-table .pill.invalid { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.4); }
+  .issues-table .pill.missing { background: rgba(242,179,106,0.12); color: #f2b36a; border: 1px solid rgba(242,179,106,0.4); }
+
+  .cov-section { margin-top: 16px; }
+  .cov-section-header { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; margin-bottom: 10px; }
+  .cov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .cov { background: #101010; border: 1px solid #222; border-radius: 6px; padding: 12px 14px; }
+  .cov-label { font-size: 11px; color: #aaaaaa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .cov-bar { height: 6px; background: #222; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .cov-fill { height: 6px; background: #1f7a3a; border-radius: 3px; transition: width 0.3s ease; }
+  .cov-fill.amber { background: #a86c20; }
+  .cov-fill.red { background: #c43838; }
+  .cov-text { font-size: 12px; color: #cccccc; font-family: monospace; }
+
+  .works-section { margin-top: 16px; background: #101010; border: 1px solid #222; border-radius: 6px; overflow: hidden; }
+  .works-section-header { padding: 12px 16px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; }
+  .works-section-header .count { color: #aaaaaa; font-family: monospace; }
+  .works-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .works-table th, .works-table td { text-align: left; padding: 8px 14px; border-bottom: 1px solid #222; color: #cccccc; }
+  .works-table tr:last-child td { border-bottom: 0; }
+  .works-table th { background: #0a0a0a; font-size: 10px; color: #8f9bb3; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+  .works-table td.wid { color: #6dbe85; font-family: monospace; font-size: 12px; }
+  .works-table .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .works-table .pill.clean { background: rgba(31,122,58,0.15); color: #6dbe85; border: 1px solid rgba(31,122,58,0.4); }
+  .works-table .pill.major { background: rgba(196,56,56,0.15); color: #f87171; border: 1px solid rgba(196,56,56,0.4); }
+  .btn-secondary { display: inline-block; padding: 10px 18px; border-radius: 4px; background: transparent; border: 1px solid #2f2f2f; color: #f5f5f5; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
+  .btn-secondary:hover { border-color: #444; }
+
+  footer.foot { color: #888; font-size: 12px; text-align: center; padding: 24px; border-top: 1px solid #222; margin-top: 32px; }
+  footer.foot p { margin: 4px 0; }
+  footer.foot a { color: #aaaaaa; }
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="brand">
+    <span class="brand-mark"></span>
+    <a href="index.html"><span class="brand-text">{{PartnerBrand}}</span></a>
+  </div>
+  <nav class="primary">
+    <a href="index.html">Start</a>
+    <a href="validera.html" class="active">Validering</a>
+    <a href="faq.html">FAQ</a>
+    <a href="pricing-kataloghub.html">Priser</a>
+    <a href="contact.html">Kontakt</a>
+    <span class="lang-toggle">
+      <a href="validera.html" class="active">SV</a>
+      <a href="validate-en.html">EN</a>
+    </span>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Validering av katalogfil</h1>
+    <p class="lede">Filbaserad kontroll av struktur, identifierare och format. Ingen integration. Ingen automatisering.</p>
+  </section>
+
+  <section class="divider">
+    <h2>Ladda upp katalogfil</h2>
+    <div class="upload-card">
+      <p class="req">Krävd struktur: work_id, title, writer_name, writer_ipi, role_code, share, agreement_type, iswc, isrc. <a href="#" id="sample-link" style="color:#6dbe85;text-decoration:underline;">Hämta exempelfil</a>.</p>
+      <div class="upload-row">
+        <label for="file" class="file-label">Välj fil</label>
+        <input id="file" type="file" accept=".csv" style="display:none;">
+        <span id="file-name">Ingen fil har valts</span>
+        <button id="start" class="btn-primary" disabled>Starta validering</button>
+      </div>
+    </div>
+    <div class="status" id="status" style="display:none;"></div>
+    <div class="actions" id="actions" style="display:none;">
+      <button id="download-pdf" class="btn-secondary">Ladda ner PDF-rapport</button>
+      <button id="download-csv" class="btn-secondary">Ladda ner CSV-underlag</button>
+    </div>
+    <div class="issues-table" id="issues-table" style="display:none;">
+      <div class="issues-header">
+        <span>Avvikelser</span>
+        <span class="count" id="issues-count"></span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>work_id</th><th>fält</th><th>nuvarande</th><th>status</th><th>kommentar</th></tr>
+        </thead>
+        <tbody id="issues-body"></tbody>
+      </table>
+    </div>
+
+    <div class="cov-section" id="cov-section" style="display:none;">
+      <div class="cov-section-header">Identifierartäckning</div>
+      <div class="cov-grid" id="cov-grid"></div>
+    </div>
+
+    <div class="works-section" id="works-section" style="display:none;">
+      <div class="works-section-header">
+        <span>Status per verk</span>
+        <span class="count" id="works-count"></span>
+      </div>
+      <table class="works-table">
+        <thead>
+          <tr><th>work_id</th><th>title</th><th>status</th><th>avvikelsefält</th></tr>
+        </thead>
+        <tbody id="works-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="divider">
+    <h2>Vad som kontrolleras</h2>
+    <ul class="checks">
+      <li>Kolumnordning och obligatoriska fält</li>
+      <li>Identifierare: work_id, writer_ipi, iswc, isrc</li>
+      <li>Format, roller, andelar och teckenkodning</li>
+      <li>Dubbletter baserat på work_id och writer_ipi</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p>Kataloghub – Filbaserad validering av katalogmetadata. Filer lagras inte efter leverans.</p>
+</footer>
+
+<script>
+window.KATALOGHUB_TIER_CONFIG = window.KATALOGHUB_TIER_CONFIG || { maxWorksPerValidation: 1000, maxValidationsPerPeriod: 1, maxCatalogsPerPeriod: 1 };
+window.KATALOGHUB_USAGE_STATE = window.KATALOGHUB_USAGE_STATE || { validationsThisPeriod: 0, catalogsThisPeriod: 0, userId: null };
+
+var TIER_MESSAGES = {
+  OK: 'Validering kan genomföras.',
+  LIMIT_WORKS: 'Valideringen kan inte genomföras. Antalet verk överstiger avtalad nivå.',
+  LIMIT_VALIDATIONS: 'Valideringsgränsen för perioden är uppnådd. Uppdatering av avtal krävs.',
+  LIMIT_CATALOGS: 'Antalet kataloger överstiger avtalad nivå. Kontakta HeyRoya för justering.'
+};
+
+function $(id) { return document.getElementById(id); }
+function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
+function csvEscape(v) { v = (v == null) ? '' : String(v); if (/[",\n]/.test(v)) return '"' + v.replace(/"/g, '""') + '"'; return v; }
+function setStatus(html, cls) { var s = $('status'); s.style.display = 'block'; s.className = 'status' + (cls ? ' ' + cls : ''); s.innerHTML = html; }
+
+var FOREIGN_SOCIETIES = { TONO:1, GEMA:1, SACEM:1, PRS:1, BMI:1, ASCAP:1, SOCAN:1, ICE:1, MLC:1, SIAE:1, BUMA:1, SUISA:1, ZAIKS:1, AKM:1, AUSTRO:1, SABAM:1, SACM:1, SADAIC:1, APRA:1, JASRAC:1 };
+
+function parseCsv(text) {
+  var rows = [];
+  var lines = text.replace(/\r\n/g, '\n').split('\n');
+  for (var li = 0; li < lines.length; li++) {
+    var line = lines[li]; if (!line.trim()) continue;
+    var cells = []; var cur = ''; var inQ = false;
+    for (var i = 0; i < line.length; i++) {
+      var c = line[i];
+      if (inQ) {
+        if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+        else if (c === '"') inQ = false;
+        else cur += c;
+      } else {
+        if (c === '"') inQ = true;
+        else if (c === ',' || c === ';') { cells.push(cur); cur = ''; }
+        else cur += c;
+      }
+    }
+    cells.push(cur); rows.push(cells);
+  }
+  if (rows.length === 0) throw new Error('Filen saknar data.');
+  var header = rows[0].map(function(h){ return h.trim().toLowerCase(); });
+  var dataRows = rows.slice(1);
+
+  function hasAll(cols) { for (var i = 0; i < cols.length; i++) if (header.indexOf(cols[i]) < 0) return false; return true; }
+  function val(cols, name) { var i = header.indexOf(name); return (i >= 0 && cols[i] != null) ? cols[i].trim() : ''; }
+
+  var newRequired = ['work_id','title','writer_name','writer_ipi','role_code','share','agreement_type','iswc','isrc'];
+  if (hasAll(newRequired)) {
+    return dataRows.map(function(cols){ var o = {}; for (var hi = 0; hi < header.length; hi++) o[header[hi]] = (cols[hi] != null ? cols[hi] : '').trim(); return o; });
+  }
+
+  // Legacy 8-column schema auto-detect: title, name, role, share_percent, ipi (+ optional iswc/isrc/society).
+  // Auto-converts to the new 9-column schema in memory before validation.
+  var legacyRequired = ['title','name','role','share_percent','ipi'];
+  if (hasAll(legacyRequired)) {
+    var workIdMap = {};
+    var nextId = 1;
+    return dataRows.map(function(cols){
+      var title = val(cols, 'title');
+      if (!workIdMap[title]) { workIdMap[title] = 'W-' + String(nextId++).padStart(3, '0'); }
+      var society = val(cols, 'society').toUpperCase();
+      var agreement = FOREIGN_SOCIETIES[society] ? 'SE' : 'E';
+      return {
+        work_id:        workIdMap[title],
+        title:          title,
+        writer_name:    val(cols, 'name'),
+        writer_ipi:     val(cols, 'ipi'),
+        role_code:      val(cols, 'role'),
+        share:          val(cols, 'share_percent'),
+        agreement_type: agreement,
+        iswc:           val(cols, 'iswc'),
+        isrc:           val(cols, 'isrc')
+      };
+    });
+  }
+
+  // Neither schema matched — report the first new-schema column missing.
+  for (var ri = 0; ri < newRequired.length; ri++) {
+    if (header.indexOf(newRequired[ri]) < 0) throw new Error('Saknar kolumn: ' + newRequired[ri]);
+  }
+  throw new Error('Okänt CSV-format.');
+}
+
+function validateRow(row) {
+  var issues = [];
+  if (!row.work_id) issues.push(['work_id','','','missing','Saknar work_id']);
+  if (!row.writer_ipi || row.writer_ipi.length < 9) issues.push(['writer_ipi', row.writer_ipi, '', 'invalid', 'Ogiltigt IPI-format']);
+  if (['C','CA','A'].indexOf(row.role_code) < 0) issues.push(['role_code', row.role_code, '', 'invalid', 'Ogiltig rollkod']);
+  var s = Number(row.share); if (!(s > 0) || s > 100) issues.push(['share', row.share, '', 'invalid', 'Ogiltig delning']);
+  if (['E','SE','AM'].indexOf(row.agreement_type) < 0) issues.push(['agreement_type', row.agreement_type, '', 'invalid', 'Ogiltig avtalstyp']);
+  return issues.map(function(a){ return { work_id: row.work_id, field: a[0], original_value: a[1], validated_value: a[2], status: a[3], comment: a[4] }; });
+}
+
+function detectDuplicates(rows) {
+  var seen = {}; var dups = [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i]; var key = (r.work_id || '') + '|' + (r.writer_ipi || '');
+    if (!r.work_id && !r.writer_ipi) continue;
+    if (seen[key]) dups.push({ work_id: r.work_id, field: 'duplicate', original_value: r.writer_ipi, validated_value: '', status: 'invalid', comment: 'Dubblett av work_id+writer_ipi' });
+    else seen[key] = true;
+  }
+  return dups;
+}
+
+function tierGate(distinct) {
+  var c = window.KATALOGHUB_TIER_CONFIG, u = window.KATALOGHUB_USAGE_STATE;
+  if (typeof c.maxWorksPerValidation === 'number' && distinct > c.maxWorksPerValidation) return { status: 'blocked', reason: TIER_MESSAGES.LIMIT_WORKS, code: 'LIMIT_WORKS' };
+  if (typeof c.maxValidationsPerPeriod === 'number' && (u.validationsThisPeriod || 0) >= c.maxValidationsPerPeriod) return { status: 'blocked', reason: TIER_MESSAGES.LIMIT_VALIDATIONS, code: 'LIMIT_VALIDATIONS' };
+  if (typeof c.maxCatalogsPerPeriod === 'number' && (u.catalogsThisPeriod || 0) >= c.maxCatalogsPerPeriod) return { status: 'blocked', reason: TIER_MESSAGES.LIMIT_CATALOGS, code: 'LIMIT_CATALOGS' };
+  return { status: 'allowed', reason: TIER_MESSAGES.OK, code: 'OK' };
+}
+
+function uniqueCount(rows, key) { var seen = {}, n = 0; for (var i = 0; i < rows.length; i++) { var v = (rows[i][key] || '').trim(); if (v && !seen[v]) { seen[v] = 1; n++; } } return n; }
+
+// Embedded 15-work test catalog (new 9-column schema). Click "Hämta
+// exempelfil" to download. The catalog contains realistic data with
+// intentional issues so the validator finds something to report.
+var SAMPLE_CSV = [
+  'work_id,title,writer_name,writer_ipi,role_code,share,agreement_type,iswc,isrc',
+  'W-001,Midnattssol,Erik Andersson,00712984310,CA,50,E,T-100.001.001-1,SE-NRD-26-10001',
+  'W-001,Midnattssol,Maria Svensson,00123456789,CA,50,E,T-100.001.001-1,SE-NRD-26-10001',
+  'W-002,Vågens Sång,Johan Berg,00345678901,CA,50,E,T-100.002.002-2,SE-NRD-26-10002',
+  'W-002,Vågens Sång,Karin Lindgren,00987654321,CA,50,E,T-100.002.002-2,SE-NRD-26-10002',
+  'W-003,Skär,Anna Holm,00444555666,CA,50,E,,SE-NRD-26-10003',
+  'W-003,Skär,Sofie Berg,00777888999,CA,50,E,,SE-NRD-26-10003',
+  'W-004,Drottningens Klang,Mikael Östberg,00888999000,CA,50,E,,SE-NRD-26-10004',
+  'W-004,Drottningens Klang,Erik Andersson,00712984310,CA,50,E,,SE-NRD-26-10004',
+  'W-005,Frusen Tid,Maria Svensson,00123456789,CA,60,E,T-100.005.005-5,SE-NRD-26-10005',
+  'W-005,Frusen Tid,Johan Berg,00345678901,CA,30,E,T-100.005.005-5,SE-NRD-26-10005',
+  'W-006,Bergslagen,Karin Lindgren,00987654321,CA,40,E,T-100.006.006-6,SE-NRD-26-10006',
+  'W-006,Bergslagen,Anna Holm,00444555666,CA,40,E,T-100.006.006-6,SE-NRD-26-10006',
+  'W-006,Bergslagen,Sofie Berg,00777888999,CA,30,E,T-100.006.006-6,SE-NRD-26-10006',
+  'W-007,Vinterns Ros,Lars Petersen,,CA,50,E,T-100.007.007-7,SE-NRD-26-10007',
+  'W-007,Vinterns Ros,Erik Andersson,00712984310,CA,50,E,T-100.007.007-7,SE-NRD-26-10007',
+  'W-008,Nordvinden,Mikael Östberg,00888999000,CA,50,E,T-100.008.008-8,SE-NRD-26-10008',
+  'W-008,Nordvinden,Maria Svensson,00123456789,CA,50,E,T-100.008.008-8,SE-NRD-26-10008',
+  'W-009,Berlin Drömmar,Tobias Schmidt,00211322433,CA,50,SE,T-100.009.009-9,SE-NRD-26-10009',
+  'W-009,Berlin Drömmar,Erik Andersson,00712984310,CA,50,E,T-100.009.009-9,SE-NRD-26-10009',
+  'W-010,Paris i Höst,Pierre Lambert,00322433544,CA,50,SE,T-100.010.010-1,SE-NRD-26-10010',
+  'W-010,Paris i Höst,Maria Svensson,00123456789,CA,50,E,T-100.010.010-1,SE-NRD-26-10010',
+  'W-011,Skuggornas Dans,Anna Holm,00444555666,WR,50,E,T-100.011.011-2,SE-NRD-26-10011',
+  'W-011,Skuggornas Dans,Johan Berg,00345678901,CA,50,E,T-100.011.011-2,SE-NRD-26-10011',
+  'W-012,Stjärnvägen,L. Petersen,00111222333,CA,50,E,T-100.012.012-3,SE-NRD-26-10012',
+  'W-012,Stjärnvägen,Karin Lindgren,00987654321,CA,50,E,T-100.012.012-3,SE-NRD-26-10012',
+  'W-013,Tystnaden Talar,Erik Andersson,00712984310,CA,50,E,T-100.013.013-4,SE-NRD-26-10013',
+  'W-013,Tystnaden Talar,Maria Svensson,00123456789,CA,50,E,T-100.013.013-4,SE-NRD-26-10013',
+  'W-014,Glömda Dagar,Sofie Berg,,CA,50,E,,SE-NRD-26-10014',
+  'W-014,Glömda Dagar,Johan Berg,00345678901,CA,50,E,,SE-NRD-26-10014',
+  'W-015,Norrlands Hjärta,Lars Petersen,00111222333,CA,50,E,T-100.015.015-6,SE-NRD-26-10015',
+  'W-015,Norrlands Hjärta,Mikael Östberg,00888999000,CA,50,E,T-100.015.015-6,SE-NRD-26-10015'
+].join('\n');
+
+function downloadSample() {
+  var blob = new Blob([SAMPLE_CSV], { type: 'text/csv;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'kataloghub-exempel.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+$('sample-link').addEventListener('click', function(e){ e.preventDefault(); downloadSample(); });
+
+var parsed = null; var lastResult = null;
+
+$('file').addEventListener('change', function(e){
+  var f = e.target.files[0]; if (!f) return;
+  $('file-name').textContent = f.name;
+  var r = new FileReader();
+  r.onload = function(ev){
+    try { parsed = parseCsv(ev.target.result); $('start').disabled = false; $('status').style.display = 'none'; $('actions').style.display = 'none'; $('issues-table').style.display = 'none'; $('cov-section').style.display = 'none'; $('works-section').style.display = 'none'; }
+    catch (err) { parsed = null; $('start').disabled = true; setStatus('<strong>Fel:</strong> ' + escapeHtml(err.message), 'error'); }
+  };
+  r.readAsText(f, 'UTF-8');
+});
+
+$('start').addEventListener('click', function(){
+  if (!parsed) return;
+  var distinct = uniqueCount(parsed, 'work_id');
+  var gate = tierGate(distinct);
+  if (gate.status === 'blocked') { setStatus('<strong>' + escapeHtml(gate.reason) + '</strong><span class="code">' + gate.code + '</span>', 'blocked'); $('actions').style.display = 'none'; return; }
+
+  var allIssues = [];
+  for (var i = 0; i < parsed.length; i++) { var ri = validateRow(parsed[i]); for (var j = 0; j < ri.length; j++) allIssues.push(ri[j]); }
+  var dups = detectDuplicates(parsed); for (var k = 0; k < dups.length; k++) allIssues.push(dups[k]);
+
+  var scanDate = new Date().toISOString().slice(0, 10);
+  var scanId = 'HR-' + scanDate.replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+  lastResult = { scanId: scanId, scanDate: scanDate, rows: parsed, issues: allIssues, distinctWorks: distinct };
+
+  setStatus(
+    '<div class="row"><span>Status</span><strong>Validering klar</strong></div>'+
+    '<div class="row"><span>Verk</span><strong>' + distinct + '</strong></div>'+
+    '<div class="row"><span>Rader</span><strong>' + parsed.length + '</strong></div>'+
+    '<div class="row"><span>Avvikelser</span><strong>' + allIssues.length + '</strong></div>'+
+    '<div class="row"><span>Scan-ID</span><strong>' + scanId + '</strong></div>',
+    'success'
+  );
+  $('actions').style.display = 'flex';
+
+  // Render inline issues table
+  var tbody = $('issues-body'); tbody.innerHTML = '';
+  for (var ii = 0; ii < allIssues.length; ii++) {
+    var x = allIssues[ii];
+    var tr = document.createElement('tr');
+    var orig = x.original_value === '' ? '—' : x.original_value;
+    tr.innerHTML = '<td class="wid">' + escapeHtml(x.work_id || '—') + '</td>'
+      + '<td class="field">' + escapeHtml(x.field) + '</td>'
+      + '<td class="original">' + escapeHtml(orig) + '</td>'
+      + '<td><span class="pill ' + escapeHtml(x.status) + '">' + escapeHtml(x.status) + '</span></td>'
+      + '<td>' + escapeHtml(x.comment) + '</td>';
+    tbody.appendChild(tr);
+  }
+  if (allIssues.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#6dbe85;padding:18px;">Inga avvikelser identifierade.</td></tr>';
+  }
+  $('issues-count').textContent = allIssues.length + ' rader';
+  $('issues-table').style.display = 'block';
+
+  // Identifier coverage (6 bars)
+  var workTitles = {}, workHasISWC = {}, workHasISRC = {};
+  for (var ri2 = 0; ri2 < parsed.length; ri2++) {
+    var rr = parsed[ri2], wid2 = rr.work_id || '';
+    if (!workTitles[wid2]) workTitles[wid2] = rr.title || '';
+    if ((rr.iswc || '').trim() !== '') workHasISWC[wid2] = true;
+    if ((rr.isrc || '').trim() !== '') workHasISRC[wid2] = true;
+  }
+  var workIds2 = Object.keys(workTitles);
+  var iswcOK = 0, isrcOK = 0;
+  for (var w2 = 0; w2 < workIds2.length; w2++) {
+    if (workHasISWC[workIds2[w2]]) iswcOK++;
+    if (workHasISRC[workIds2[w2]]) isrcOK++;
+  }
+  var ipiOK = 0, roleOK = 0, shareOK = 0, agrOK = 0;
+  for (var pj2 = 0; pj2 < parsed.length; pj2++) {
+    var pr2 = parsed[pj2];
+    if ((pr2.writer_ipi || '').length >= 9) ipiOK++;
+    if (['C','CA','A'].indexOf(pr2.role_code) >= 0) roleOK++;
+    var sn = Number(pr2.share); if (sn > 0 && sn <= 100) shareOK++;
+    if (['E','SE','AM'].indexOf(pr2.agreement_type) >= 0) agrOK++;
+  }
+  function pctNum(n, total) { return total ? Math.round(100 * n / total) : 0; }
+  function fillClass(p) { return p === 100 ? '' : (p >= 80 ? 'amber' : 'red'); }
+  function covCard(label, n, total) {
+    var p = pctNum(n, total);
+    return '<div class="cov"><div class="cov-label">' + escapeHtml(label) + '</div>'
+      + '<div class="cov-bar"><div class="cov-fill ' + fillClass(p) + '" style="width:' + p + '%;"></div></div>'
+      + '<div class="cov-text">' + n + ' / ' + total + ' (' + p + '%)</div></div>';
+  }
+  var covHtml = covCard('ISWC per verk', iswcOK, distinct)
+    + covCard('ISRC per verk', isrcOK, distinct)
+    + covCard('writer_ipi (rader)', ipiOK, parsed.length)
+    + covCard('role_code (rader)', roleOK, parsed.length)
+    + covCard('share (rader)', shareOK, parsed.length)
+    + covCard('agreement_type (rader)', agrOK, parsed.length);
+  $('cov-grid').innerHTML = covHtml;
+  $('cov-section').style.display = 'block';
+
+  // Status per verk
+  var byWid = {};
+  for (var bi2 = 0; bi2 < allIssues.length; bi2++) {
+    var iy = allIssues[bi2];
+    (byWid[iy.work_id || ''] = byWid[iy.work_id || ''] || []).push(iy);
+  }
+  var wbody = $('works-body'); wbody.innerHTML = '';
+  for (var wj2 = 0; wj2 < workIds2.length; wj2++) {
+    var wid3 = workIds2[wj2]; if (!wid3) continue;
+    var t = workTitles[wid3] || '';
+    var iss = byWid[wid3] || [];
+    var pill = iss.length === 0
+      ? '<span class="pill clean">Ren</span>'
+      : '<span class="pill major">Avvikelser</span>';
+    var fields = iss.length ? iss.map(function(z){ return z.field; }).join(', ') : '—';
+    var trw = document.createElement('tr');
+    trw.innerHTML = '<td class="wid">' + escapeHtml(wid3) + '</td>'
+      + '<td>' + escapeHtml(t) + '</td>'
+      + '<td>' + pill + '</td>'
+      + '<td>' + escapeHtml(fields) + '</td>';
+    wbody.appendChild(trw);
+  }
+  $('works-count').textContent = workIds2.filter(function(k){ return k; }).length + ' verk';
+  $('works-section').style.display = 'block';
+});
+
+function downloadFile(content, filename, mime) { var blob = new Blob([content], { type: mime + ';charset=utf-8' }); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url); }
+
+$('download-csv').addEventListener('click', function(){
+  if (!lastResult) return;
+  var out = ['work_id,field,original_value,validated_value,status,comment'];
+  for (var i = 0; i < lastResult.issues.length; i++) { var x = lastResult.issues[i]; out.push([x.work_id, x.field, x.original_value, x.validated_value, x.status, x.comment].map(csvEscape).join(',')); }
+  downloadFile(out.join('\n'), 'kataloghub-CSV-underlag-' + lastResult.scanId + '.csv', 'text/csv');
+});
+
+$('download-pdf').addEventListener('click', function(){
+  if (!lastResult) return;
+  var rows = lastResult.rows;
+  var issues = lastResult.issues;
+  var totalRows = rows.length;
+  var distinctWorks = lastResult.distinctWorks;
+
+  var byField = {}, byWorkId = {};
+  for (var bi = 0; bi < issues.length; bi++) {
+    var x = issues[bi];
+    (byField[x.field] = byField[x.field] || []).push(x);
+    (byWorkId[x.work_id || ''] = byWorkId[x.work_id || ''] || []).push(x);
+  }
+  var labels = { work_id: 'Saknar work_id', writer_ipi: 'Ogiltigt IPI-format', role_code: 'Ogiltig rollkod', share: 'Ogiltig delning', agreement_type: 'Ogiltig avtalstyp', duplicate: 'Dubbletter (work_id + writer_ipi)' };
+
+  var workTitles = {}, workHasISWC = {}, workHasISRC = {};
+  for (var ri = 0; ri < rows.length; ri++) {
+    var r = rows[ri], w = r.work_id || '';
+    if (!workTitles[w]) workTitles[w] = r.title || '';
+    if ((r.iswc || '').trim() !== '') workHasISWC[w] = true;
+    if ((r.isrc || '').trim() !== '') workHasISRC[w] = true;
+  }
+  var workIds = Object.keys(workTitles);
+  var iswcOK = 0, isrcOK = 0;
+  for (var wi = 0; wi < workIds.length; wi++) {
+    if (workHasISWC[workIds[wi]]) iswcOK++;
+    if (workHasISRC[workIds[wi]]) isrcOK++;
+  }
+
+  var ipiOK = 0, roleOK = 0, shareOK = 0, agrOK = 0;
+  for (var pj = 0; pj < rows.length; pj++) {
+    var pr = rows[pj];
+    if ((pr.writer_ipi || '').length >= 9) ipiOK++;
+    if (['C','CA','A'].indexOf(pr.role_code) >= 0) roleOK++;
+    var s = Number(pr.share); if (s > 0 && s <= 100) shareOK++;
+    if (['E','SE','AM'].indexOf(pr.agreement_type) >= 0) agrOK++;
+  }
+  function pct(n, total) { return total ? Math.round(100 * n / total) + '%' : '0%'; }
+
+  var entries = []; for (var fk in byField) entries.push([fk, byField[fk]]);
+  entries.sort(function(a,b){ return b[1].length - a[1].length; });
+  var commonList = entries.map(function(e){ return '<li><strong>' + escapeHtml(labels[e[0]] || e[0]) + ':</strong> ' + e[1].length + ' ' + (e[1].length === 1 ? 'rad' : 'rader') + '</li>'; }).join('');
+
+  var coverage = '<div class="cov-grid">'
+    + '<div class="cov"><div class="cov-label">ISWC per verk</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(iswcOK, distinctWorks) + ';"></div></div><div class="cov-text">' + iswcOK + ' / ' + distinctWorks + ' (' + pct(iswcOK, distinctWorks) + ')</div></div>'
+    + '<div class="cov"><div class="cov-label">ISRC per verk</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(isrcOK, distinctWorks) + ';"></div></div><div class="cov-text">' + isrcOK + ' / ' + distinctWorks + ' (' + pct(isrcOK, distinctWorks) + ')</div></div>'
+    + '<div class="cov"><div class="cov-label">writer_ipi (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(ipiOK, totalRows) + ';"></div></div><div class="cov-text">' + ipiOK + ' / ' + totalRows + ' (' + pct(ipiOK, totalRows) + ')</div></div>'
+    + '<div class="cov"><div class="cov-label">role_code (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(roleOK, totalRows) + ';"></div></div><div class="cov-text">' + roleOK + ' / ' + totalRows + ' (' + pct(roleOK, totalRows) + ')</div></div>'
+    + '<div class="cov"><div class="cov-label">share (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(shareOK, totalRows) + ';"></div></div><div class="cov-text">' + shareOK + ' / ' + totalRows + ' (' + pct(shareOK, totalRows) + ')</div></div>'
+    + '<div class="cov"><div class="cov-label">agreement_type (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(agrOK, totalRows) + ';"></div></div><div class="cov-text">' + agrOK + ' / ' + totalRows + ' (' + pct(agrOK, totalRows) + ')</div></div>'
+    + '</div>';
+
+  function detailSection(heading, items) { return items ? '<h2>' + heading + '</h2><div class="panel">' + items + '</div>' : ''; }
+  function bullets(arr, fmt) { return (arr || []).map(fmt).join(''); }
+
+  var idSec = '';
+  var ipiItems  = bullets(byField.writer_ipi, function(i){ return '<li>' + escapeHtml(i.work_id || '(tom)') + ' · ipi <code>' + escapeHtml(i.original_value || '(tom)') + '</code> — ' + escapeHtml(i.comment) + '</li>'; });
+  var widItems  = bullets(byField.work_id,    function(i){ return '<li>Rad utan work_id — ' + escapeHtml(i.comment) + '</li>'; });
+  var dupItems  = bullets(byField.duplicate,  function(i){ return '<li>' + escapeHtml(i.work_id) + ' · ipi <code>' + escapeHtml(i.original_value) + '</code> — ' + escapeHtml(i.comment) + '</li>'; });
+  if (widItems || ipiItems || dupItems) {
+    idSec = '<h2>Identifierar- och dubblettvalidering</h2><div class="panel">'
+      + (widItems ? '<div class="group-h">Saknad work_id</div><ul>' + widItems + '</ul>' : '')
+      + (ipiItems ? '<div class="group-h">Ogiltigt writer_ipi</div><ul>' + ipiItems + '</ul>' : '')
+      + (dupItems ? '<div class="group-h">Dubbletter</div><ul>' + dupItems + '</ul>' : '')
+      + '</div>';
+  }
+  var roleItems = bullets(byField.role_code,      function(i){ return '<li>' + escapeHtml(i.work_id) + ' · <code>' + escapeHtml(i.original_value || '(tom)') + '</code> — ' + escapeHtml(i.comment) + '</li>'; });
+  var agrItems  = bullets(byField.agreement_type, function(i){ return '<li>' + escapeHtml(i.work_id) + ' · <code>' + escapeHtml(i.original_value || '(tom)') + '</code> — ' + escapeHtml(i.comment) + '</li>'; });
+  var roleSec = '';
+  if (roleItems || agrItems) {
+    roleSec = '<h2>Roll- och avtalsvalidering</h2><div class="panel">'
+      + (roleItems ? '<div class="group-h">Ogiltig rollkod</div><ul>' + roleItems + '</ul>' : '')
+      + (agrItems ? '<div class="group-h">Ogiltig avtalstyp</div><ul>' + agrItems + '</ul>' : '')
+      + '</div>';
+  }
+  var shareSec = detailSection('Andelsvalidering', bullets(byField.share, function(i){ return '<li>' + escapeHtml(i.work_id) + ' · share = <strong>' + escapeHtml(i.original_value) + '</strong> — ' + escapeHtml(i.comment) + '</li>'; }) ? '<ul>' + bullets(byField.share, function(i){ return '<li>' + escapeHtml(i.work_id) + ' · share = <strong>' + escapeHtml(i.original_value) + '</strong> — ' + escapeHtml(i.comment) + '</li>'; }) + '</ul>' : '');
+
+  var workRowsHtml = '';
+  for (var wj = 0; wj < workIds.length; wj++) {
+    var wid = workIds[wj]; if (!wid) continue;
+    var t = workTitles[wid] || '';
+    var w_iss = byWorkId[wid] || [];
+    var pill = w_iss.length === 0 ? '<span class="pill clean">Ren</span>' : '<span class="pill major">Avvikelser</span>';
+    var keyIssues = w_iss.length ? w_iss.map(function(i){ return i.field; }).join(', ') : '—';
+    workRowsHtml += '<tr><td class="wid">' + escapeHtml(wid) + '</td><td>' + escapeHtml(t) + '</td><td>' + pill + '</td><td>' + escapeHtml(keyIssues) + '</td></tr>';
+  }
+  var worksWithIssues = Object.keys(byWorkId).filter(function(k){ return k; }).length;
+
+  var html = '<!DOCTYPE html>\n<html lang="sv">\n<head>\n<meta charset="UTF-8">\n<title>Valideringsrapport — Kataloghub</title>\n<style>\n'
+    + 'body { background:#fff; color:#111; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.55; padding:32px 28px 64px; }\n'
+    + '.container { max-width:1080px; margin:0 auto; }\n'
+    + 'h1 { font-size:18px; color:#1f7a3a; margin-bottom:6px; }\n'
+    + '.meta { font-size:12px; color:#555; }\n'
+    + '.print-btn { background:#1f7a3a; color:#fff; border:0; border-radius:4px; padding:8px 14px; font-weight:600; cursor:pointer; font-size:12px; margin-top:8px; }\n'
+    + '.summary { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin:18px 0; }\n'
+    + '.card { border:1px solid #e5e5e5; border-radius:6px; padding:12px 14px; }\n'
+    + '.card .label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }\n'
+    + '.card .value { font-size:22px; font-weight:600; }\n'
+    + 'h2 { font-size:13px; text-transform:uppercase; letter-spacing:0.08em; color:#1f7a3a; margin:24px 0 8px; }\n'
+    + '.panel { border:1px solid #e5e5e5; border-radius:6px; padding:12px 16px; }\n'
+    + '.panel ul { margin:0; padding-left:20px; } .panel li { font-size:13px; color:#333; padding:4px 0; }\n'
+    + '.disclaimer { border:1px solid #e5e5e5; border-radius:6px; padding:12px 16px; margin-top:18px; font-size:12px; color:#444; }\n'
+    + '.disclaimer p { margin-bottom:4px; }\n'
+    + 'header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding-bottom:16px; border-bottom:1px solid #e5e5e5; margin-bottom:18px; }\n'
+    + '.card .sub { font-size:11px; color:#777; margin-top:2px; }\n'
+    + '.card.red .value { color:#c43838; } .card.amber .value { color:#a86c20; }\n'
+    + '.panel li code { background:#f6f6f6; border:1px solid #e5e5e5; border-radius:3px; padding:1px 5px; font-size:12px; color:#1f7a3a; }\n'
+    + '.panel .group-h { font-weight:700; color:#111; margin-top:10px; margin-bottom:4px; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }\n'
+    + '.panel .group-h:first-child { margin-top:0; }\n'
+    + '.cov-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }\n'
+    + '.cov { border:1px solid #e5e5e5; border-radius:6px; padding:12px 14px; }\n'
+    + '.cov-label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }\n'
+    + '.cov-bar { height:6px; background:#f0f0f0; border-radius:3px; overflow:hidden; margin-bottom:6px; }\n'
+    + '.cov-fill { height:6px; background:#1f7a3a; border-radius:3px; }\n'
+    + '.cov-text { font-size:12px; color:#444; font-family:monospace; }\n'
+    + 'table.works { width:100%; border-collapse:collapse; font-size:12px; border:1px solid #e5e5e5; border-radius:6px; overflow:hidden; margin-top:8px; }\n'
+    + 'table.works th, table.works td { padding:10px 14px; text-align:left; border-bottom:1px solid #e5e5e5; }\n'
+    + 'table.works th { background:#f5f5f5; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:#555; font-weight:700; }\n'
+    + 'table.works tr:last-child td { border-bottom:0; }\n'
+    + 'table.works .wid { font-family:monospace; color:#1f7a3a; }\n'
+    + '.pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }\n'
+    + '.pill.major { background:#fdeaea; color:#c43838; border:1px solid #f3c7c7; }\n'
+    + '.pill.clean { background:#e7f7f1; color:#0f6657; border:1px solid #b5dccb; }\n'
+    + '@media print { .print-btn { display:none; } body { padding:20px; } }\n'
+    + '</style>\n</head>\n<body>\n<div class="container">\n'
+    + '<header>\n'
+    + '  <div>\n'
+    + '    <h1>Kataloghub · Valideringsrapport</h1>\n'
+    + '    <div class="meta">Scan-ID: ' + escapeHtml(lastResult.scanId) + ' · Genererad ' + escapeHtml(lastResult.scanDate) + '</div>\n'
+    + '    <div class="meta">Verk: ' + distinctWorks + ' · Rader: ' + totalRows + ' · Avvikelser: ' + issues.length + '</div>\n'
+    + '  </div>\n'
+    + '  <button class="print-btn" onclick="window.print()">Skriv ut / Spara som PDF</button>\n'
+    + '</header>\n'
+    + '<div class="summary">\n'
+    + '  <div class="card"><div class="label">Verk analyserade</div><div class="value">' + distinctWorks + '</div><div class="sub">unika work_id</div></div>\n'
+    + '  <div class="card"><div class="label">Rader</div><div class="value">' + totalRows + '</div><div class="sub">upphovsposteringar</div></div>\n'
+    + '  <div class="card ' + (issues.length ? 'red' : '') + '"><div class="label">Avvikelser</div><div class="value">' + issues.length + '</div><div class="sub">i hela katalogen</div></div>\n'
+    + '  <div class="card ' + (worksWithIssues ? 'amber' : '') + '"><div class="label">Verk med avvikelser</div><div class="value">' + worksWithIssues + '</div><div class="sub">av ' + distinctWorks + '</div></div>\n'
+    + '</div>\n'
+    + '<h2>Vanligaste avvikelser</h2>\n'
+    + '<div class="panel"><ul>' + (commonList || '<li>Inga avvikelser identifierade.</li>') + '</ul></div>\n'
+    + '<h2>Identifierartäckning</h2>\n'
+    + coverage
+    + idSec
+    + shareSec
+    + roleSec
+    + '<h2>Status per verk</h2>\n'
+    + '<table class="works"><thead><tr><th>work_id</th><th>title</th><th>Status</th><th>Avvikelsefält</th></tr></thead><tbody>' + workRowsHtml + '</tbody></table>\n'
+    + '<div class="disclaimer">\n'
+    + '  <p><strong>Valideringsbegränsningar.</strong> Kataloghub genomför validering enligt avtalad nivå.</p>\n'
+    + '  <p>Korrigering av metadata ingår inte. Korrigering erbjuds separat via HeyRoya.</p>\n'
+    + '</div>\n'
+    + '</div>\n</body>\n</html>';
+  var w = window.open('', '_blank');
+  if (!w) { alert('Pop-up blockerad — tillåt pop-ups för denna sida.'); return; }
+  w.document.open(); w.document.write(html); w.document.close();
+});
+</script>
+<!-- src-guard:v1 -->
+<script>
+(function(){
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
+  document.addEventListener('keydown', function(e){
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
+  }, false);
+})();
+</script>
+</body>
+</html>
