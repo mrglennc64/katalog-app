@@ -9,7 +9,12 @@ const NAV: { href: string; label: string; exact?: boolean }[] = [
   { href: "/kataloghub/catalogs", label: "Catalogs" },
   { href: "/kataloghub/scans", label: "Scan History" },
   { href: "/kataloghub/worksheets", label: "Worksheets" },
+  { href: "/kataloghub/tasks", label: "Tasks" },
+  { href: "/kataloghub/compare", label: "Compare Scans" },
+  { href: "/kataloghub/analytics/issues", label: "Common Issues" },
+  { href: "/kataloghub/analytics/health", label: "Health Trend" },
   { href: "/kataloghub/exports", label: "Exports" },
+  { href: "/kataloghub/limits", label: "Scan Limits" },
   { href: "/kataloghub/billing", label: "Billing" },
   { href: "/kataloghub/settings", label: "Settings" },
 ];
