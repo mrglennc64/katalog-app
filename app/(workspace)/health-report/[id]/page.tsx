@@ -6,6 +6,7 @@ import { BeforeAfterTabs } from "@/app/components/BeforeAfterTabs";
 import { FixInSourceSystem } from "@/app/components/FixInSourceSystem";
 import { ValidationVsCorrection } from "@/app/components/ValidationVsCorrection";
 import { ScoreNumber } from "@/app/components/ScoreNumber";
+import { ExportSection } from "@/app/components/ExportSection";
 import { mockHealthReport } from "@/lib/mock";
 
 export default async function HealthReportPage({
@@ -102,13 +103,11 @@ export default async function HealthReportPage({
         <ValidationVsCorrection />
       </section>
 
+      <section className="mb-6">
+        <ExportSection catalogId={id} />
+      </section>
+
       <section className="flex flex-wrap gap-3">
-        <Link
-          href={`/api/catalogs/${id}/worksheet`}
-          className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
-        >
-          Download worksheet (CSV)
-        </Link>
         <Link
           href={`/scan-history`}
           className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"

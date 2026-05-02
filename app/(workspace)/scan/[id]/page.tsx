@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/app/components/Card";
 import { Pill } from "@/app/components/Pill";
-import { HowToFix } from "@/app/components/HowToFix";
+import { IssueCategoryGrid } from "@/app/components/IssueCategoryGrid";
 import { NextSteps } from "@/app/components/NextSteps";
 import { CwrReadyBadge } from "@/app/components/CwrReadyBadge";
 import { FixInSourceSystem } from "@/app/components/FixInSourceSystem";
@@ -60,28 +60,30 @@ export default async function ScanResultPage({
       </section>
 
       <section className="mb-4 grid gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-2" title="Issue types">
-          <ul className="m-0 list-none p-0">
-            {report.issueTypes.map((it) => (
-              <HowToFix key={it.field} issue={it} />
-            ))}
-          </ul>
+        <Card className="lg:col-span-2" title="Issue categories">
+          <IssueCategoryGrid issues={report.issueTypes} />
         </Card>
         <NextSteps />
       </section>
 
       <section className="mb-4 flex flex-wrap gap-3">
         <Link
-          href={`/health-report/${id}`}
+          href={`/worksheets/${id}`}
           className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
         >
-          View full health report
+          Download worksheet
         </Link>
         <Link
-          href={`/api/catalogs/${id}/worksheet`}
+          href={`/health-report/${id}`}
           className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
         >
-          Download worksheet
+          View health report
+        </Link>
+        <Link
+          href="https://heyroya.se/pages/correction.html"
+          className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+        >
+          Continue to HeyRoya →
         </Link>
       </section>
 
