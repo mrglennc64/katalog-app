@@ -71,7 +71,7 @@ export default function NewCatalogPage() {
             type="button"
             onClick={create}
             disabled={submitting || !name.trim()}
-            className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark disabled:cursor-not-allowed disabled:bg-border"
+            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
           >
             {submitting ? "Skapar…" : "Skapa katalog"}
           </button>

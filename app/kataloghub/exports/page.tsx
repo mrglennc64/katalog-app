@@ -4,15 +4,15 @@ export default function ExportsPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Exports</h1>
+        <h1 className="text-2xl font-semibold">Exporter</h1>
         <p className="mt-1 text-sm text-text-muted">
-          CWR-ready catalogs, after corrections have been confirmed by HeyRoya.
+          CWR-redo kataloger efter att HeyRoya bekräftat korrigeringar.
         </p>
       </header>
 
-      <Card title="CWR-ready">
+      <Card title="CWR-redo">
         <p className="text-sm text-text-muted">
-          Stub. Wire to HeyRoya correction-summary export endpoint.
+          Ingen export skapad ännu.
         </p>
       </Card>
     </>

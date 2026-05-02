@@ -23,7 +23,7 @@ export function ExportSection({ catalogId }: { catalogId: string }) {
         </Link>
         <Link
           href={`/api/catalogs/${catalogId}/cwr`}
-          className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
+          className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
         >
           Download CWR export (.v21)
         </Link>

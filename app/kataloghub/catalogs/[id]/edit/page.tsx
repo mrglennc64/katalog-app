@@ -107,7 +107,7 @@ export default function EditCatalogPage({
             type="button"
             onClick={save}
             disabled={submitting}
-            className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark disabled:cursor-not-allowed disabled:bg-border"
+            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
           >
             {submitting ? "Sparar…" : "Spara"}
           </button>

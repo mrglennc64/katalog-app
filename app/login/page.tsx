@@ -57,7 +57,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={submitting || !email.includes("@")}
-            className="w-full rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark disabled:cursor-not-allowed disabled:bg-border"
+            className="w-full rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
           >
             {submitting ? "Skickar…" : "Skicka inloggningslänk"}
           </button>

@@ -37,7 +37,7 @@ export default function CatalogListPage() {
         </div>
         <Link
           href="/kataloghub/catalogs/new"
-          className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
+          className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
         >
           + Lägg till katalog
         </Link>

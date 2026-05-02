@@ -31,7 +31,7 @@ export function CwrReadyBadge({ report }: { report: HealthReport }) {
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-kh-green px-3 py-1 text-xs font-semibold text-white">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-kh-orange px-3 py-1 text-xs font-semibold text-white">
       <span aria-hidden>✓</span> Clean catalog · CWR-ready
     </span>
   );

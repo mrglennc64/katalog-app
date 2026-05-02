@@ -1,23 +1,35 @@
 @import "tailwindcss";
 
-/* Kataloghub design tokens (Fortnox-style). Light theme, single source of truth. */
+/* Kataloghub design tokens — Årsredovisning Online palette.
+   Warm orange primary CTA, teal info, dark green branding/sidebar. */
 :root {
   --kh-bg: #ffffff;
-  --kh-surface: #f7f7f7;
-  --kh-border: #e2e2e2;
+  --kh-surface: #f6f6f4;
+  --kh-border: #e5e3df;
 
-  --kh-green: #0f8f6a;
-  --kh-green-dark: #0a6f55;
-  --kh-yellow: #f2c744;
-  --kh-red: #d64545;
-  --kh-text: #222222;
-  --kh-text-muted: #666666;
-  --kh-link: #0f8f6a;
+  /* Branding green — used for sidebar, step indicators, success */
+  --kh-green: #1f7a3a;
+  --kh-green-dark: #155829;
 
-  --kh-nav-bg: #0a6f55;
+  /* Primary action — warm orange CTA */
+  --kh-orange: #e89638;
+  --kh-orange-dark: #c97a1e;
+
+  /* Secondary / info — teal-blue */
+  --kh-teal: #4a9aa0;
+  --kh-teal-dark: #357881;
+
+  --kh-yellow: #e8b94a;
+  --kh-red: #c43838;
+
+  --kh-text: #1a1a1a;
+  --kh-text-muted: #6a6a6a;
+  --kh-link: #1f7a3a;
+
+  --kh-nav-bg: #1f7a3a;
   --kh-nav-text: #ffffff;
   --kh-nav-active: #ffffff;
-  --kh-nav-active-bg: #0f8f6a;
+  --kh-nav-active-bg: #155829;
 }
 
 @theme inline {
@@ -29,6 +41,10 @@
 
   --color-kh-green: var(--kh-green);
   --color-kh-green-dark: var(--kh-green-dark);
+  --color-kh-orange: var(--kh-orange);
+  --color-kh-orange-dark: var(--kh-orange-dark);
+  --color-kh-teal: var(--kh-teal);
+  --color-kh-teal-dark: var(--kh-teal-dark);
   --color-kh-yellow: var(--kh-yellow);
   --color-kh-red: var(--kh-red);
 

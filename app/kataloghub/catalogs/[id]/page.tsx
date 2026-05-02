@@ -37,7 +37,7 @@ export default function CatalogDetailPage({
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/kataloghub/upload?catalog=${encodeURIComponent(data.id)}`}
-            className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
+            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
           >
             Ladda upp ny skanning
           </Link>

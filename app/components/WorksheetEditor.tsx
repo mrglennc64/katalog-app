@@ -121,7 +121,7 @@ export function WorksheetEditor({
           type="button"
           disabled={!stats.ready}
           onClick={downloadCsv}
-          className="rounded bg-kh-green px-4 py-1.5 text-sm font-semibold text-white hover:bg-kh-green-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
+          className="rounded bg-kh-orange px-4 py-1.5 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
         >
           Export worksheet (CSV)
         </button>

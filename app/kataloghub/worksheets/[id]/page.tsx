@@ -13,10 +13,10 @@ export default async function WorksheetEditorPage({
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Worksheet</h1>
+        <h1 className="text-2xl font-semibold">Arbetsblad</h1>
         <p className="mt-1 text-sm text-text-muted">
-          Catalog {id} · {rows.length} issues. Confirm or reject each
-          suggested correction. Send the completed worksheet to HeyRoya.
+          Katalog {id} · {rows.length} avvikelser. Bekräfta eller avslå varje
+          föreslagen korrigering. Skicka det ifyllda arbetsbladet till HeyRoya.
         </p>
       </header>
 
@@ -26,9 +26,9 @@ export default async function WorksheetEditorPage({
 
       <div className="mt-4 rounded border border-border bg-surface p-4 text-sm text-text-muted">
         <p>
-          <strong className="text-text">Publisher confirmation required.</strong>{" "}
-          No corrections are applied without explicit accept/edit decisions on
-          the rows below. Kataloghub does not modify your catalog.
+          <strong className="text-text">Publicistgodkännande krävs.</strong>{" "}
+          Inga korrigeringar utförs utan uttryckligt beslut per rad nedan.
+          Kataloghub ändrar inte din katalog.
         </p>
       </div>
     </>

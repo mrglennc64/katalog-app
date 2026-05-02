@@ -35,7 +35,7 @@ export default function WorksheetPage({
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Kalkylblad</h1>
+        <h1 className="text-2xl font-semibold">Arbetsblad</h1>
         <p className="mt-1 text-sm text-text-muted">
           Detta är underlaget som publicisten ska arbeta med.
         </p>
@@ -79,7 +79,7 @@ export default function WorksheetPage({
         <div className="mt-4 flex flex-wrap gap-3">
           <a
             href={apiUrl(`/api/kataloghub/worksheet/${id}/download`)}
-            className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
+            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
           >
             Ladda ner kalkylblad (CSV)
           </a>

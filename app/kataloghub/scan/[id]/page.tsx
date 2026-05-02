@@ -91,7 +91,7 @@ export default function ScanResultPage({
           <div className="flex flex-wrap gap-3">
             <Link
               href={`/kataloghub/health-report/${id}`}
-              className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
+              className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
             >
               Visa hälsorapport
             </Link>

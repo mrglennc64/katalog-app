@@ -28,7 +28,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Welcome</h1>
+        <h1 className="text-2xl font-semibold">Välkommen</h1>
         <p className="mt-1 text-sm text-text-muted">Laddar…</p>
       </header>
     );
@@ -38,14 +38,14 @@ export default function DashboardPage() {
     return (
       <>
         <header className="mb-6">
-          <h1 className="text-2xl font-semibold">Welcome</h1>
+          <h1 className="text-2xl font-semibold">Välkommen</h1>
           <p className="mt-1 text-sm text-text-muted">
-            File-based metadata validation. No system access. No ingestion.
+            Filbaserad validering av katalogmetadata. Ingen systemåtkomst. Ingen ingestion.
           </p>
         </header>
         <Card>
           <p className="text-sm text-kh-red">
-            Kunde inte ladda dashboard-data.
+            Kunde inte ladda data.
           </p>
         </Card>
       </>
@@ -57,44 +57,44 @@ export default function DashboardPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Welcome</h1>
+        <h1 className="text-2xl font-semibold">Välkommen</h1>
         <p className="mt-1 text-sm text-text-muted">
           {data.companyName} · {data.orgnr}
         </p>
       </header>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card title="Get started with Kataloghub">
+        <Card title="Kom igång">
           <ol className="list-decimal pl-5 text-sm text-text">
             <li className="py-0.5">
               <Link href="/kataloghub/upload" className="text-kh-green underline hover:text-kh-green-dark">
-                Upload catalog (CSV)
+                Ladda upp katalog
               </Link>
             </li>
-            <li className="py-0.5">Run scan</li>
-            <li className="py-0.5">Download worksheet</li>
-            <li className="py-0.5">Send worksheet to HeyRoya</li>
+            <li className="py-0.5">Kör skanning</li>
+            <li className="py-0.5">Ladda ner arbetsblad</li>
+            <li className="py-0.5">Skicka arbetsblad till HeyRoya</li>
           </ol>
         </Card>
 
-        <Card title="Att göra · To-do">
+        <Card title="Att göra">
           <ul className="space-y-1 text-sm text-text">
-            <li>• {data.pendingScans} scans pending</li>
-            <li>• {data.pendingWorksheets} worksheets awaiting confirmation</li>
-            <li>• {data.completedReports} reports ready</li>
+            <li>• {data.pendingScans} skanningar väntar</li>
+            <li>• {data.pendingWorksheets} arbetsblad väntar bekräftelse</li>
+            <li>• {data.completedReports} rapporter klara</li>
           </ul>
         </Card>
 
-        <Card title="Insikter · Insights">
+        <Card title="Insikter">
           <ul className="space-y-1 text-sm text-text">
-            <li>Total scans: {data.totalScans}</li>
-            <li>Last scan: {data.lastScan}</li>
+            <li>Totala skanningar: {data.totalScans}</li>
+            <li>Senaste skanning: {data.lastScan}</li>
           </ul>
         </Card>
 
-        <Card title="Hur det går · Status">
+        <Card title="Status">
           <p className="mb-2 text-sm text-text">
-            Avg health (last scan):{" "}
+            Genomsnittlig hälsa:{" "}
             <strong className="text-base">{data.avgHealth} / 100</strong>
           </p>
           <div className="space-y-1.5">
@@ -108,19 +108,19 @@ export default function DashboardPage() {
       </section>
 
       <section className="mt-6 grid gap-4 md:grid-cols-2">
-        <Card title="Företaget · Your catalogs">
+        <Card title="Företaget">
           <ul className="space-y-1 text-sm text-text">
-            <li>{data.totalScans} totala scans</li>
-            <li>{data.pendingWorksheets} pending corrections</li>
+            <li>Totala skanningar: {data.totalScans}</li>
+            <li>Väntar korrigering: {data.pendingWorksheets}</li>
           </ul>
         </Card>
 
-        <Card title="Fakturering · Billing">
+        <Card title="Fakturering">
           <p className="text-sm text-text-muted">
-            Pris per scan: <strong className="text-text">{data.pricePerScan} SEK</strong>
+            Pris per skanning: <strong className="text-text">{data.pricePerScan} SEK</strong>
           </p>
           <p className="mt-1 text-sm text-text-muted">
-            Antal scans: <strong className="text-text">{data.totalScans}</strong>
+            Antal skanningar: <strong className="text-text">{data.totalScans}</strong>
           </p>
           <p className="mt-2 text-base font-semibold text-text">
             Total: {billingTotal.toLocaleString("sv-SE")} SEK

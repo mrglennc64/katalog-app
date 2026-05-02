@@ -542,13 +542,13 @@ export default function UploadPage() {
   return (
     <>
       <header className="mb-6">
-        <h1 className="text-2xl font-semibold">Upload Catalog</h1>
+        <h1 className="text-2xl font-semibold">Ladda upp katalog</h1>
         <p className="mt-1 text-sm text-text-muted">
           Filbaserad kontroll av struktur, identifierare och format. Ingen integration. Ingen automatisering.
         </p>
       </header>
 
-      <Card title="Catalog file (CSV)">
+      <Card title="Katalogfil (CSV)">
         <p className="mb-3 font-mono text-xs text-text-muted">
           Krävd struktur: work_id, title, writer_name, writer_ipi, role_code, share, agreement_type, iswc, isrc.{" "}
           <button type="button" onClick={downloadSample} className="text-kh-green underline hover:text-kh-green-dark">
@@ -576,7 +576,7 @@ export default function UploadPage() {
             type="button"
             onClick={runScan}
             disabled={!parsed}
-            className="ml-auto rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
+            className="ml-auto rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
           >
             Starta validering
           </button>
