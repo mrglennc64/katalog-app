@@ -8,9 +8,13 @@ function authHeaders(): Record<string, string> {
   return API_KEY ? { "X-API-Key": API_KEY } : {};
 }
 
-export async function GET() {
+export async function GET(
+  _req: Request,
+  ctx: { params: Promise<{ id: string }> },
+) {
+  const { id } = await ctx.params;
   try {
-    const res = await fetch(`${BACKEND_URL}/api/catalogs`, {
+    const res = await fetch(`${BACKEND_URL}/api/catalogs/${encodeURIComponent(id)}`, {
       headers: authHeaders(),
       signal: AbortSignal.timeout(15_000),
     });
@@ -24,38 +28,22 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json([
-    {
-      id: "C-001",
-      name: "Example Publishing Q2",
-      lastScan: "2026-05-02",
-      lastScanId: "HR-20260502-A1B2",
-      score: 87,
-      blocking: 1,
-      resolvable: 3,
-    },
-    {
-      id: "C-002",
-      name: "Example Publishing Q1",
-      lastScan: "2026-04-18",
-      lastScanId: "HR-20260418-C3D4",
-      score: 94,
-      blocking: 0,
-      resolvable: 1,
-    },
-    {
-      id: "C-003",
-      name: "Example Publishing 2025",
-      lastScan: "2026-03-21",
-      lastScanId: "HR-20260321-E5F6",
-      score: 72,
-      blocking: 4,
-      resolvable: 8,
-    },
-  ]);
+  return NextResponse.json({
+    id,
+    name: "Example Publishing Q2",
+    scans: [
+      { id: "HR-20260502-A1B2", timestamp: "2026-05-02 14:32", score: 87 },
+      { id: "HR-20260418-C3D4", timestamp: "2026-04-18 09:14", score: 94 },
+      { id: "HR-20260321-E5F6", timestamp: "2026-03-21 11:08", score: 72 },
+    ],
+  });
 }
 
-export async function POST(req: Request) {
+export async function PUT(
+  req: Request,
+  ctx: { params: Promise<{ id: string }> },
+) {
+  const { id } = await ctx.params;
   let body: { name?: string };
   try {
     body = await req.json();
@@ -68,8 +56,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const res = await fetch(`${BACKEND_URL}/api/catalogs`, {
-      method: "POST",
+    const res = await fetch(`${BACKEND_URL}/api/catalogs/${encodeURIComponent(id)}`, {
+      method: "PUT",
       headers: { ...authHeaders(), "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
       signal: AbortSignal.timeout(15_000),
@@ -84,6 +72,29 @@ export async function POST(req: Request) {
     }
   }
 
-  const id = "C-" + Math.random().toString(36).slice(2, 6).toUpperCase();
-  return NextResponse.json({ id, name, lastScan: null, lastScanId: null, score: null, blocking: 0, resolvable: 0 });
+  return NextResponse.json({ id, name });
+}
+
+export async function DELETE(
+  _req: Request,
+  ctx: { params: Promise<{ id: string }> },
+) {
+  const { id } = await ctx.params;
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/catalogs/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+      headers: authHeaders(),
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (res.ok) return NextResponse.json({ ok: true });
+    if (REQUIRE_BACKEND) {
+      return NextResponse.json({ error: `backend HTTP ${res.status}` }, { status: res.status });
+    }
+  } catch (err) {
+    if (REQUIRE_BACKEND) {
+      return NextResponse.json({ error: `backend unreachable: ${String(err)}` }, { status: 502 });
+    }
+  }
+
+  return NextResponse.json({ ok: true, deleted: id });
 }

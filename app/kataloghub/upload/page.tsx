@@ -270,16 +270,28 @@ export default function UploadPage() {
     const f = e.target.files?.[0];
     if (!f) return;
     setFileName(f.name);
+    setResult(null);
+    setParsed(null);
+
+    const MAX_SIZE = 50 * 1024 * 1024;
+    if (f.size > MAX_SIZE) {
+      setStatusMsg({ html: "<strong>Fel:</strong> Filen är för stor. Max 50 MB.", kind: "error" });
+      return;
+    }
+    const isCsvType = f.type === "text/csv" || f.type === "application/vnd.ms-excel" || f.type === "";
+    const isCsvName = f.name.toLowerCase().endsWith(".csv");
+    if (!isCsvType && !isCsvName) {
+      setStatusMsg({ html: "<strong>Fel:</strong> Endast CSV-filer stöds.", kind: "error" });
+      return;
+    }
+
     const r = new FileReader();
     r.onload = (ev) => {
       try {
         const out = parseCsv(String(ev.target?.result ?? ""));
         setParsed(out);
         setStatusMsg(null);
-        setResult(null);
       } catch (err) {
-        setParsed(null);
-        setResult(null);
         setStatusMsg({ html: "<strong>Fel:</strong> " + escapeHtml((err as Error).message), kind: "error" });
       }
     };
