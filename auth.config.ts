@@ -7,14 +7,7 @@ export default {
   trustHost: true,
   basePath: `${APP_BASE_PATH}/api/auth`,
   pages: {
-    signIn: "/login",
-    verifyRequest: "/login/check-email",
-  },
-  callbacks: {
-    authorized({ request, auth }) {
-      const isProtected = request.nextUrl.pathname.startsWith("/kataloghub");
-      if (isProtected && !auth) return false;
-      return true;
-    },
+    signIn: `${APP_BASE_PATH}/login`,
+    verifyRequest: `${APP_BASE_PATH}/login/check-email`,
   },
 } satisfies NextAuthConfig;

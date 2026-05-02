@@ -2,13 +2,14 @@ import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import authConfig from "@/auth.config";
 
+const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
-  console.log("[mw]", req.nextUrl.pathname, "auth=", !!req.auth);
-  if (!req.auth && req.nextUrl.pathname.startsWith("/kataloghub")) {
+  if (!req.auth) {
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = `${APP_BASE_PATH}/login`;
+    url.search = "";
     return NextResponse.redirect(url);
   }
 });
