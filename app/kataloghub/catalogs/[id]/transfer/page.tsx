@@ -84,14 +84,14 @@ export default function TransferCatalogPage({
             type="button"
             onClick={transfer}
             disabled={submitting || !email.includes("@")}
-            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
+            className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
           >
             {submitting ? "Överför…" : "Överför"}
           </button>
           <button
             type="button"
             onClick={() => router.push(`/kataloghub/catalogs/${id}`)}
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Avbryt
           </button>

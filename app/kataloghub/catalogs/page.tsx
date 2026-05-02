@@ -37,7 +37,7 @@ export default function CatalogListPage() {
         </div>
         <Link
           href="/kataloghub/catalogs/new"
-          className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
+          className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
         >
           + Lägg till katalog
         </Link>
@@ -95,7 +95,7 @@ export default function CatalogListPage() {
                       <td className="py-2">
                         <Link
                           href={`/kataloghub/catalogs/${cat.id}`}
-                          className="inline-block rounded border border-border bg-bg px-3 py-1 text-xs font-medium text-text hover:border-text-muted"
+                          className="inline-block rounded-full border border-border bg-bg px-3 py-1 text-xs font-medium text-text hover:border-text-muted"
                         >
                           Öppna
                         </Link>

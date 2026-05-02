@@ -88,7 +88,7 @@ export default function CategoryPage({
       <section className="mt-6">
         <Link
           href={`/kataloghub/scan/${id}`}
-          className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+          className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
         >
           Tillbaka till scan-resultat
         </Link>

@@ -1,30 +1,31 @@
 @import "tailwindcss";
 
 /* Kataloghub design tokens — Årsredovisning Online palette.
-   Warm orange primary CTA, teal info, dark green branding/sidebar. */
+   Warm orange CTA, petrol-teal info, dark green branding/sidebar,
+   warm cream surface, white cards. */
 :root {
   --kh-bg: #ffffff;
-  --kh-surface: #f6f6f4;
-  --kh-border: #e5e3df;
+  --kh-surface: #f6f1ea;
+  --kh-border: #e8e3d8;
 
-  /* Branding green — used for sidebar, step indicators, success */
+  /* Branding green — sidebar, step indicators, success */
   --kh-green: #1f7a3a;
   --kh-green-dark: #155829;
 
-  /* Primary action — warm orange CTA */
-  --kh-orange: #e89638;
-  --kh-orange-dark: #c97a1e;
+  /* Primary action — saturated warm orange */
+  --kh-orange: #e89938;
+  --kh-orange-dark: #c47626;
 
-  /* Secondary / info — teal-blue */
-  --kh-teal: #4a9aa0;
-  --kh-teal-dark: #357881;
+  /* Secondary / info — petrol teal */
+  --kh-teal: #3a8189;
+  --kh-teal-dark: #2b6770;
 
   --kh-yellow: #e8b94a;
   --kh-red: #c43838;
 
   --kh-text: #1a1a1a;
   --kh-text-muted: #6a6a6a;
-  --kh-link: #1f7a3a;
+  --kh-link: #c47626;
 
   --kh-nav-bg: #1f7a3a;
   --kh-nav-text: #ffffff;
@@ -56,7 +57,7 @@
 }
 
 body {
-  background: var(--kh-bg);
+  background: var(--kh-surface);
   color: var(--kh-text);
   font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
 }

@@ -37,19 +37,19 @@ export default function CatalogDetailPage({
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/kataloghub/upload?catalog=${encodeURIComponent(data.id)}`}
-            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
+            className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
           >
             Ladda upp ny skanning
           </Link>
           <Link
             href={`/kataloghub/catalogs/${data.id}/edit`}
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Redigera
           </Link>
           <Link
             href={`/kataloghub/catalogs/${data.id}/transfer`}
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Överför
           </Link>
@@ -78,7 +78,7 @@ export default function CatalogDetailPage({
                   <td className="py-2">
                     <Link
                       href={`/kataloghub/scan/${s.id}`}
-                      className="inline-block rounded border border-border bg-bg px-3 py-1 text-xs font-medium text-text hover:border-text-muted"
+                      className="inline-block rounded-full border border-border bg-bg px-3 py-1 text-xs font-medium text-text hover:border-text-muted"
                     >
                       Visa
                     </Link>

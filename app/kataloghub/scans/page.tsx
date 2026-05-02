@@ -70,7 +70,7 @@ export default function ScanHistoryPage() {
                   <div className="mt-2">
                     <Link
                       href={`/kataloghub/scan/${scan.id}`}
-                      className="inline-block rounded border border-border bg-bg px-3 py-1 text-xs font-medium text-text hover:border-text-muted"
+                      className="inline-block rounded-full border border-border bg-bg px-3 py-1 text-xs font-medium text-text hover:border-text-muted"
                     >
                       Visa resultat
                     </Link>

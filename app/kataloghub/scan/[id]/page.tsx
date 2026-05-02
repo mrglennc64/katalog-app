@@ -91,19 +91,19 @@ export default function ScanResultPage({
           <div className="flex flex-wrap gap-3">
             <Link
               href={`/kataloghub/health-report/${id}`}
-              className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
+              className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
             >
               Visa hälsorapport
             </Link>
             <Link
               href={`/kataloghub/worksheet/${id}`}
-              className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+              className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
             >
               Visa kalkylblad
             </Link>
             <a
               href={apiUrl(`/api/kataloghub/worksheet/${id}/download`)}
-              className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+              className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
             >
               Ladda ner kalkylblad (CSV)
             </a>

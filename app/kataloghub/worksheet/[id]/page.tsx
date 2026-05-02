@@ -79,19 +79,19 @@ export default function WorksheetPage({
         <div className="mt-4 flex flex-wrap gap-3">
           <a
             href={apiUrl(`/api/kataloghub/worksheet/${id}/download`)}
-            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
+            className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
           >
             Ladda ner kalkylblad (CSV)
           </a>
           <a
             href={`${HEYROYA_URL}?catalog=${encodeURIComponent(id)}`}
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Skicka till HeyRoya →
           </a>
           <Link
             href={`/kataloghub/scan/${id}`}
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Tillbaka till scan
           </Link>

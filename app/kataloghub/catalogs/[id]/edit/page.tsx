@@ -107,14 +107,14 @@ export default function EditCatalogPage({
             type="button"
             onClick={save}
             disabled={submitting}
-            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
+            className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
           >
             {submitting ? "Sparar…" : "Spara"}
           </button>
           <button
             type="button"
             onClick={() => router.push(`/kataloghub/catalogs/${id}`)}
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Avbryt
           </button>
@@ -142,14 +142,14 @@ export default function EditCatalogPage({
               type="button"
               onClick={remove}
               disabled={submitting}
-              className="rounded bg-kh-red px-4 py-2 text-sm font-semibold text-white hover:bg-kh-red/80 disabled:cursor-not-allowed"
+              className="rounded-full bg-kh-red px-4 py-2 text-sm font-semibold text-white hover:bg-kh-red/80 disabled:cursor-not-allowed"
             >
               {submitting ? "Tar bort…" : "Ja, ta bort"}
             </button>
             <button
               type="button"
               onClick={() => setConfirmDelete(false)}
-              className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+              className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
             >
               Avbryt
             </button>

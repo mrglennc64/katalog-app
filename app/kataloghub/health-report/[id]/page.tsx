@@ -108,13 +108,13 @@ export default function HealthReportPage({
       <section className="mt-6 flex flex-wrap gap-3">
         <Link
           href={`/kataloghub/scan/${id}`}
-          className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+          className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
         >
           Tillbaka till scan
         </Link>
         <Link
           href={`/kataloghub/worksheet/${id}`}
-          className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+          className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
         >
           Visa kalkylblad
         </Link>

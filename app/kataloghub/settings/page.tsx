@@ -54,7 +54,7 @@ export default function CompanySettingsPage() {
           <button
             type="button"
             disabled
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text-muted disabled:cursor-not-allowed"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text-muted disabled:cursor-not-allowed"
           >
             Redigera (kommer snart)
           </button>

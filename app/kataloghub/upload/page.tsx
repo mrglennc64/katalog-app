@@ -559,7 +559,7 @@ export default function UploadPage() {
         <div className="flex flex-wrap items-center gap-3">
           <label
             htmlFor="catalog"
-            className="inline-block cursor-pointer rounded border border-border bg-bg px-4 py-2 text-sm hover:border-text-muted"
+            className="inline-block cursor-pointer rounded-full border border-border bg-bg px-4 py-2 text-sm hover:border-text-muted"
           >
             Välj fil
           </label>
@@ -576,7 +576,7 @@ export default function UploadPage() {
             type="button"
             onClick={runScan}
             disabled={!parsed}
-            className="ml-auto rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
+            className="ml-auto rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
           >
             Starta validering
           </button>

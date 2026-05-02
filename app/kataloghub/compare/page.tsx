@@ -84,7 +84,7 @@ export default function CompareScansPage() {
             type="button"
             onClick={runDiff}
             disabled={loading}
-            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
+            className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border"
           >
             {loading ? "Jämför…" : "Jämför"}
           </button>

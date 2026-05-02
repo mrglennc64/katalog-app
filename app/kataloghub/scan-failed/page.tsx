@@ -25,13 +25,13 @@ export default function ScanFailedPage() {
         <div className="mt-4 flex flex-wrap gap-3">
           <Link
             href="/kataloghub/upload"
-            className="rounded bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
+            className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
           >
             Försök igen
           </Link>
           <Link
             href="/kataloghub"
-            className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+            className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
             Tillbaka till dashboard
           </Link>

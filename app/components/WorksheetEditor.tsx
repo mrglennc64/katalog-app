@@ -88,21 +88,21 @@ export function WorksheetEditor({
         <button
           type="button"
           onClick={acceptAll}
-          className="rounded border border-border bg-bg px-3 py-1.5 text-sm font-medium hover:border-text-muted"
+          className="rounded-full border border-border bg-bg px-3 py-1.5 text-sm font-medium hover:border-text-muted"
         >
           Accept all
         </button>
         <button
           type="button"
           onClick={rejectAll}
-          className="rounded border border-border bg-bg px-3 py-1.5 text-sm font-medium hover:border-text-muted"
+          className="rounded-full border border-border bg-bg px-3 py-1.5 text-sm font-medium hover:border-text-muted"
         >
           Reject all
         </button>
         <button
           type="button"
           onClick={clearAll}
-          className="rounded border border-border bg-bg px-3 py-1.5 text-sm font-medium text-text-muted hover:border-text-muted"
+          className="rounded-full border border-border bg-bg px-3 py-1.5 text-sm font-medium text-text-muted hover:border-text-muted"
         >
           Clear decisions
         </button>
@@ -121,7 +121,7 @@ export function WorksheetEditor({
           type="button"
           disabled={!stats.ready}
           onClick={downloadCsv}
-          className="rounded bg-kh-orange px-4 py-1.5 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
+          className="rounded-full bg-kh-orange px-4 py-1.5 text-sm font-semibold text-white hover:bg-kh-orange-dark disabled:cursor-not-allowed disabled:bg-border disabled:text-text-muted"
         >
           Export worksheet (CSV)
         </button>
