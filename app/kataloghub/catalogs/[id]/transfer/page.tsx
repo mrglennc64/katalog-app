@@ -3,6 +3,7 @@
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/app/components/Card";
+import { apiFetch } from "@/lib/api";
 
 export default function TransferCatalogPage({
   params,
@@ -24,7 +25,7 @@ export default function TransferCatalogPage({
     }
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/kataloghub/catalogs/${id}/transfer`, {
+      const res = await apiFetch(`/api/kataloghub/catalogs/${id}/transfer`, {
         method: "POST",
         body: JSON.stringify({ email: email.trim() }),
         headers: { "Content-Type": "application/json" },

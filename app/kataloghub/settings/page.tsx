@@ -10,12 +10,12 @@ type Company = {
   email: string;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function CompanySettingsPage() {
   const { data, error, isLoading } = useSWR<Company>(
     "/api/kataloghub/company",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

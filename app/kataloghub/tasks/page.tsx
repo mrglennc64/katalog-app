@@ -13,7 +13,7 @@ type Task = {
   status: "open" | "deferred" | "done" | string;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 function tonefor(status: string): "green" | "yellow" | "red" | "neutral" {
   if (status === "done") return "green";
@@ -25,7 +25,7 @@ function tonefor(status: string): "green" | "yellow" | "red" | "neutral" {
 export default function FixLaterTasks() {
   const { data, error, isLoading } = useSWR<Task[]>(
     "/api/kataloghub/tasks",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

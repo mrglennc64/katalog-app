@@ -14,7 +14,7 @@ type ScanData = {
   categories: { name: string; count: number }[];
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher, apiUrl } from "@/lib/api";
 
 export default function ScanResultPage({
   params,
@@ -24,7 +24,7 @@ export default function ScanResultPage({
   const { id } = use(params);
   const { data, error, isLoading } = useSWR<ScanData>(
     `/api/kataloghub/scan/${id}`,
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;
@@ -102,7 +102,7 @@ export default function ScanResultPage({
               Visa kalkylblad
             </Link>
             <a
-              href={`/api/kataloghub/worksheet/${id}/download`}
+              href={apiUrl(`/api/kataloghub/worksheet/${id}/download`)}
               className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
             >
               Ladda ner kalkylblad (CSV)

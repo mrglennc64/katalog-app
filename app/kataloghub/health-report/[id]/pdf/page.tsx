@@ -19,7 +19,7 @@ type Report = {
   after?: Row[];
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function HealthReportPdf({
   params,
@@ -29,7 +29,7 @@ export default function HealthReportPdf({
   const { id } = use(params);
   const { data, error, isLoading } = useSWR<Report>(
     `/api/kataloghub/health-report/${id}`,
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p style={{ padding: 24 }}>Laddar…</p>;

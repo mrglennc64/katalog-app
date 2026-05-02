@@ -3,6 +3,7 @@
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/app/components/Card";
+import { apiFetch } from "@/lib/api";
 
 export default function EditCatalogPage({
   params,
@@ -18,7 +19,7 @@ export default function EditCatalogPage({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/kataloghub/catalogs/${id}`)
+    apiFetch(`/api/kataloghub/catalogs/${id}`)
       .then((r) => r.json())
       .then((d) => {
         setName(d.name || "");
@@ -38,7 +39,7 @@ export default function EditCatalogPage({
     }
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/kataloghub/catalogs/${id}`, {
+      const res = await apiFetch(`/api/kataloghub/catalogs/${id}`, {
         method: "PUT",
         body: JSON.stringify({ name: name.trim() }),
         headers: { "Content-Type": "application/json" },
@@ -60,7 +61,7 @@ export default function EditCatalogPage({
     setErrorMsg(null);
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/kataloghub/catalogs/${id}`, { method: "DELETE" });
+      const res = await apiFetch(`/api/kataloghub/catalogs/${id}`, { method: "DELETE" });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         setErrorMsg(j.error || `HTTP ${res.status}`);

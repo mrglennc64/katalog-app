@@ -17,7 +17,7 @@ type HealthReport = {
   after: Row[];
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 function statusClass(s: string) {
   if (s === "ok") return "border-kh-green/40 bg-kh-green/10 text-kh-green";
@@ -34,7 +34,7 @@ export default function HealthReportPage({
   const [tab, setTab] = useState<"before" | "after">("before");
   const { data, error, isLoading } = useSWR<HealthReport>(
     `/api/kataloghub/health-report/${id}`,
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

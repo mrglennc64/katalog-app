@@ -14,12 +14,12 @@ type Scan = {
   resolvable: number;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function ScanHistoryPage() {
   const { data, error, isLoading } = useSWR<Scan[]>(
     "/api/kataloghub/scans",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

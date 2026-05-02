@@ -5,12 +5,12 @@ import { Card } from "@/app/components/Card";
 
 type Item = { category: string; count: number };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function CommonIssuesPage() {
   const { data, error, isLoading } = useSWR<Item[]>(
     "/api/kataloghub/analytics/issues",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

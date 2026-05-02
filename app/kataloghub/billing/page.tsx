@@ -9,7 +9,7 @@ type Billing = {
   history: { month: string; scans: number; total: number }[];
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 function fmtSEK(n: number) {
   return n.toLocaleString("sv-SE") + " SEK";
@@ -18,7 +18,7 @@ function fmtSEK(n: number) {
 export default function BillingPage() {
   const { data, error, isLoading } = useSWR<Billing>(
     "/api/kataloghub/billing",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

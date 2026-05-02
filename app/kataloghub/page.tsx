@@ -17,12 +17,12 @@ type Dashboard = {
   orgnr: string;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function DashboardPage() {
   const { data, error, isLoading } = useSWR<Dashboard>(
     "/api/kataloghub/dashboard",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) {

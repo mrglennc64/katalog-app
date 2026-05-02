@@ -13,7 +13,7 @@ type WorksheetRow = {
   suggested: string;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher, apiUrl } from "@/lib/api";
 
 const HEYROYA_URL =
   process.env.NEXT_PUBLIC_HEYROYA_URL || "https://heyroya.se/queue";
@@ -26,7 +26,7 @@ export default function WorksheetPage({
   const { id } = use(params);
   const { data, error, isLoading } = useSWR<WorksheetRow[]>(
     `/api/kataloghub/worksheet/${id}`,
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;
@@ -78,7 +78,7 @@ export default function WorksheetPage({
 
         <div className="mt-4 flex flex-wrap gap-3">
           <a
-            href={`/api/kataloghub/worksheet/${id}/download`}
+            href={apiUrl(`/api/kataloghub/worksheet/${id}/download`)}
             className="rounded bg-kh-green px-4 py-2 text-sm font-semibold text-white hover:bg-kh-green-dark"
           >
             Ladda ner kalkylblad (CSV)

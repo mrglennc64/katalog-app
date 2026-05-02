@@ -11,7 +11,7 @@ type Catalog = {
   scans: { id: string; timestamp: string; score: number }[];
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function CatalogDetailPage({
   params,
@@ -21,7 +21,7 @@ export default function CatalogDetailPage({
   const { id } = use(params);
   const { data, error, isLoading } = useSWR<Catalog>(
     `/api/kataloghub/catalogs/${id}`,
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

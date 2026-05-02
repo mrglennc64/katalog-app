@@ -20,7 +20,7 @@ type CategoryData = {
   rows: CategoryRow[];
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function CategoryPage({
   params,
@@ -30,7 +30,7 @@ export default function CategoryPage({
   const { id, slug } = use(params);
   const { data, error, isLoading } = useSWR<CategoryData>(
     `/api/kataloghub/scan/${id}/category/${slug}`,
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

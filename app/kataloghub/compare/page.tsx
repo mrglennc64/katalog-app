@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Card } from "@/app/components/Card";
+import { apiFetch } from "@/lib/api";
 
 type DiffRow = {
   work_id: string;
@@ -32,7 +33,7 @@ export default function CompareScansPage() {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/kataloghub/compare", {
+      const res = await apiFetch("/api/kataloghub/compare", {
         method: "POST",
         body: JSON.stringify({ a, b }),
         headers: { "Content-Type": "application/json" },

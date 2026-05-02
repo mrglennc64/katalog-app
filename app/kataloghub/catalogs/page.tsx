@@ -15,12 +15,12 @@ type Catalog = {
   resolvable: number;
 };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function CatalogListPage() {
   const { data, error, isLoading } = useSWR<Catalog[]>(
     "/api/kataloghub/catalogs",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;

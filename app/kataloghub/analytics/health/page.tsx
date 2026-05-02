@@ -5,12 +5,12 @@ import { Card } from "@/app/components/Card";
 
 type Point = { timestamp: string; score: number };
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import { apiFetcher } from "@/lib/api";
 
 export default function HealthTrendPage() {
   const { data, error, isLoading } = useSWR<Point[]>(
     "/api/kataloghub/analytics/health",
-    fetcher,
+    apiFetcher,
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;
