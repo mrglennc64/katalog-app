@@ -9,6 +9,7 @@ const NAV: { href: string; label: string; exact?: boolean }[] = [
   { href: "/kataloghub/scan-history", label: "Scan History" },
   { href: "/kataloghub/worksheets", label: "Worksheets" },
   { href: "/kataloghub/exports", label: "Exports" },
+  { href: "/kataloghub/billing", label: "Billing" },
   { href: "/kataloghub/settings", label: "Settings" },
 ];
 

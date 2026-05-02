@@ -1,118 +1,122 @@
+"use client";
+
+import { use, useState } from "react";
+import useSWR from "swr";
 import Link from "next/link";
 import { Card } from "@/app/components/Card";
-import { Pill } from "@/app/components/Pill";
-import { CwrReadyBadge } from "@/app/components/CwrReadyBadge";
-import { BeforeAfterTabs } from "@/app/components/BeforeAfterTabs";
-import { FixInSourceSystem } from "@/app/components/FixInSourceSystem";
-import { ValidationVsCorrection } from "@/app/components/ValidationVsCorrection";
-import { ScoreNumber } from "@/app/components/ScoreNumber";
-import { ExportSection } from "@/app/components/ExportSection";
-import { mockHealthReport } from "@/lib/mock";
 
-export default async function HealthReportPage({
+type Row = {
+  work_id: string;
+  field: string;
+  value: string;
+  status: "ok" | "invalid" | "missing" | string;
+};
+
+type HealthReport = {
+  before: Row[];
+  after: Row[];
+};
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
+function statusClass(s: string) {
+  if (s === "ok") return "border-kh-green/40 bg-kh-green/10 text-kh-green";
+  if (s === "missing") return "border-kh-yellow/40 bg-kh-yellow/10 text-[#7a5a10]";
+  return "border-kh-red/40 bg-kh-red/10 text-kh-red";
+}
+
+export default function HealthReportPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-  const report = mockHealthReport(id);
+  const { id } = use(params);
+  const [tab, setTab] = useState<"before" | "after">("before");
+  const { data, error, isLoading } = useSWR<HealthReport>(
+    `/api/kataloghub/health-report/${id}`,
+    fetcher,
+  );
+
+  if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;
+  if (error || !data) return <p className="text-sm text-kh-red">Kunde inte ladda hälsorapporten.</p>;
+
+  const rows = data[tab];
 
   return (
     <>
-      <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold">Metadata Health Report</h1>
-          <p className="mt-1 text-sm text-text-muted">
-            Catalog: {report.catalog.works} works ·{" "}
-            {report.catalog.contributorEntries} contributor entries
-          </p>
-          <p className="mt-1 font-mono text-xs text-text-muted">
-            Scan ID: {report.scanId} · Generated {report.generated}
-          </p>
-        </div>
-        <CwrReadyBadge report={report} />
+      <header className="mb-6">
+        <h1 className="text-2xl font-semibold">Hälsorapport</h1>
+        <p className="mt-1 font-mono text-xs text-text-muted">Scan-ID: {id}</p>
       </header>
 
-      <section className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card title="Score">
-          <ScoreNumber score={report.score} />
-        </Card>
-        <Card title="Blocking">
-          <Pill tone={report.counts.blocking === 0 ? "green" : "red"}>
-            {report.counts.blocking}
-          </Pill>
-        </Card>
-        <Card title="Resolvable">
-          <Pill tone={report.counts.resolvable === 0 ? "green" : "yellow"}>
-            {report.counts.resolvable}
-          </Pill>
-        </Card>
-        <Card title="Residual">
-          <Pill tone={report.counts.residual === 0 ? "green" : "yellow"}>
-            {report.counts.residual}
-          </Pill>
-        </Card>
-      </section>
+      <Card title="Före / Efter">
+        <div className="mb-4 flex gap-2 border-b border-border">
+          <button
+            type="button"
+            onClick={() => setTab("before")}
+            className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
+              tab === "before"
+                ? "border-kh-green text-kh-green"
+                : "border-transparent text-text-muted hover:text-text"
+            }`}
+          >
+            Före korrigering
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab("after")}
+            className={`-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
+              tab === "after"
+                ? "border-kh-green text-kh-green"
+                : "border-transparent text-text-muted hover:text-text"
+            }`}
+          >
+            Efter korrigering
+          </button>
+        </div>
 
-      <section className="mb-6">
-        <Card title="Before / After">
-          <BeforeAfterTabs report={report} />
-        </Card>
-      </section>
-
-      <section className="mb-6">
-        <Card title="Per-work status">
+        <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-text-muted">
-                <th className="py-2 font-semibold">work_id</th>
-                <th className="py-2 font-semibold">title</th>
+              <tr className="border-b border-border text-left text-[11px] uppercase tracking-wide text-text-muted">
+                <th className="py-2 pr-3 font-semibold">work_id</th>
+                <th className="py-2 pr-3 font-semibold">fält</th>
+                <th className="py-2 pr-3 font-semibold">värde</th>
                 <th className="py-2 font-semibold">status</th>
-                <th className="py-2 font-semibold">issue fields</th>
               </tr>
             </thead>
             <tbody>
-              {report.works.map((w) => (
-                <tr
-                  key={w.workId}
-                  className="border-b border-border last:border-0"
-                >
-                  <td className="py-2 font-mono text-xs text-kh-green">
-                    {w.workId}
-                  </td>
-                  <td className="py-2">{w.title}</td>
+              {rows.map((row, i) => (
+                <tr key={i} className="border-b border-border last:border-0">
+                  <td className="py-2 pr-3 font-mono text-xs text-kh-green">{row.work_id}</td>
+                  <td className="py-2 pr-3 font-mono text-xs text-text">{row.field}</td>
+                  <td className="py-2 pr-3 font-mono text-xs text-text-muted">{row.value || "—"}</td>
                   <td className="py-2">
-                    <Pill tone={w.severity === "clean" ? "green" : "red"}>
-                      {w.severity === "clean" ? "Ren" : "Avvikelser"}
-                    </Pill>
-                  </td>
-                  <td className="py-2 text-text-muted">
-                    {w.issueFields.length === 0
-                      ? "—"
-                      : w.issueFields.join(", ")}
+                    <span
+                      className={`inline-block rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase ${statusClass(row.status)}`}
+                    >
+                      {row.status}
+                    </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </Card>
-      </section>
+        </div>
+      </Card>
 
-      <section className="mb-6 grid gap-4 lg:grid-cols-2">
-        <FixInSourceSystem />
-        <ValidationVsCorrection />
-      </section>
-
-      <section className="mb-6">
-        <ExportSection catalogId={id} />
-      </section>
-
-      <section className="flex flex-wrap gap-3">
+      <section className="mt-6 flex flex-wrap gap-3">
         <Link
-          href={`/scan-history`}
+          href={`/kataloghub/scan/${id}`}
           className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
         >
-          Back to scan history
+          Tillbaka till scan
+        </Link>
+        <Link
+          href={`/kataloghub/worksheet/${id}`}
+          className="rounded border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
+        >
+          Visa kalkylblad
         </Link>
       </section>
     </>
