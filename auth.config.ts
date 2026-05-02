@@ -1,10 +1,8 @@
 import type { NextAuthConfig } from "next-auth";
 
-const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
-
 export default {
   providers: [],
-  basePath: `${APP_BASE_PATH}/api/auth`,
+  trustHost: true,
   pages: {
     signIn: "/login",
     verifyRequest: "/login/check-email",
