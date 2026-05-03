@@ -4,19 +4,18 @@ const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
 const AUTH_COOKIE = "kh_session";
 
 /**
- * Edge-runtime middleware: only checks for the presence of a session cookie.
- * Cookie validity is enforced server-side in API routes / server components
- * via lib/auth-store.getSession(). Edge can't read filesystem, so we trust
- * the cookie's existence as a fast-path gate; an expired/forged cookie will
- * still be rejected by the actual session lookup downstream.
+ * Edge-runtime middleware: cookie presence check only. Cookie validity is
+ * enforced server-side in API routes / server components.
+ *
+ * URL handling: req.nextUrl.pathname already INCLUDES the Next.js basePath
+ * in this Next version, and assigning to pathname does not auto-prepend.
+ * We construct the redirect URL explicitly from origin + APP_BASE_PATH.
  */
 export default function middleware(req: NextRequest) {
   const session = req.cookies.get(AUTH_COOKIE)?.value;
   if (!session) {
-    const url = req.nextUrl.clone();
-    url.pathname = `${APP_BASE_PATH}/login`;
-    url.search = "";
-    return NextResponse.redirect(url);
+    const target = `${req.nextUrl.origin}${APP_BASE_PATH}/login`;
+    return NextResponse.redirect(target);
   }
   return NextResponse.next();
 }
