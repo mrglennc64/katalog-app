@@ -108,14 +108,26 @@ export async function GET(
     // fall through
   }
 
-  // Mock fallback — same shape as the JSON API mock
+  // Mock fallback — realistic mid-size publisher worksheet (15 issues across
+  // a 30-work catalog, varied issue types).
   const rows: Row[] = [
-    { issue_id: "I-001", work_id: "W-001", field: "writer_ipi", original_value: "1234567",  suggested_value: "00712984310", decision: "", notes: "" },
-    { issue_id: "I-002", work_id: "W-007", field: "writer_ipi", original_value: "",          suggested_value: "00111222333", decision: "", notes: "" },
-    { issue_id: "I-003", work_id: "W-011", field: "role_code",  original_value: "WR",        suggested_value: "CA",          decision: "", notes: "" },
-    { issue_id: "I-004", work_id: "W-005", field: "share",      original_value: "60",        suggested_value: "50",          decision: "", notes: "" },
+    { issue_id: "I-001", work_id: "W-001", field: "writer_ipi",     original_value: "1234567",         suggested_value: "00712984310",     decision: "", notes: "" },
+    { issue_id: "I-002", work_id: "W-002", field: "writer_ipi",     original_value: "",                suggested_value: "00345678901",     decision: "", notes: "" },
+    { issue_id: "I-003", work_id: "W-003", field: "iswc",           original_value: "",                suggested_value: "T-100.003.003-3", decision: "", notes: "" },
+    { issue_id: "I-004", work_id: "W-004", field: "role_code",      original_value: "WR",              suggested_value: "CA",              decision: "", notes: "" },
+    { issue_id: "I-005", work_id: "W-005", field: "share",          original_value: "60",              suggested_value: "50",              decision: "", notes: "" },
+    { issue_id: "I-006", work_id: "W-007", field: "writer_ipi",     original_value: "",                suggested_value: "00111222333",     decision: "", notes: "" },
+    { issue_id: "I-007", work_id: "W-008", field: "iswc",           original_value: "T-100.008",       suggested_value: "T-100.008.008-8", decision: "", notes: "" },
+    { issue_id: "I-008", work_id: "W-009", field: "isrc",           original_value: "SE-NRD-26-1",     suggested_value: "SE-NRD-26-10009", decision: "", notes: "" },
+    { issue_id: "I-009", work_id: "W-010", field: "agreement_type", original_value: "XX",              suggested_value: "SE",              decision: "", notes: "" },
+    { issue_id: "I-010", work_id: "W-011", field: "role_code",      original_value: "WR",              suggested_value: "CA",              decision: "", notes: "" },
+    { issue_id: "I-011", work_id: "W-013", field: "duplicate",      original_value: "00712984310",     suggested_value: "00712984310",     decision: "", notes: "" },
+    { issue_id: "I-012", work_id: "W-014", field: "writer_ipi",     original_value: "",                suggested_value: "00345678901",     decision: "", notes: "" },
+    { issue_id: "I-013", work_id: "W-015", field: "iswc",           original_value: "T-100.015.015-X", suggested_value: "T-100.015.015-6", decision: "", notes: "" },
+    { issue_id: "I-014", work_id: "W-001", field: "writer_name",    original_value: "Erik Anderson",   suggested_value: "Erik Andersson",  decision: "", notes: "" },
+    { issue_id: "I-015", work_id: "W-006", field: "share",          original_value: "40",              suggested_value: "33.33",           decision: "", notes: "" },
   ];
-  const csv = buildCsv({ catalogId: id, rows });
+  const csv = buildCsv({ catalogId: id, rows, publisher: "Example Publishing AB" });
   return new Response(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
