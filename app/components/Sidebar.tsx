@@ -31,7 +31,6 @@ const NAV: NavItem[] = [
   { href: "/kataloghub/exports", label: "Exporter" },
   { href: "/kataloghub/limits", label: "Skanningsgränser" },
   { href: "/kataloghub/billing", label: "Fakturering" },
-  { href: "/kataloghub/how-to", label: "Så använder du Kataloghub" },
   { href: "/kataloghub/settings", label: "Inställningar" },
 ];
 
