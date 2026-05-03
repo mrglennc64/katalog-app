@@ -10,9 +10,11 @@ const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
 const PUBLIC_DEV_LINK = process.env.NODE_ENV !== "production";
 
 function originFromRequest(req: Request): string {
-  const xfHost = req.headers.get("x-forwarded-host");
-  const xfProto = req.headers.get("x-forwarded-proto") || "http";
-  if (xfHost) return `${xfProto}://${xfHost}`;
+  const proto = req.headers.get("x-forwarded-proto") || "http";
+  const host =
+    req.headers.get("x-forwarded-host") ||
+    req.headers.get("host");
+  if (host) return `${proto}://${host}`;
   return new URL(req.url).origin;
 }
 
