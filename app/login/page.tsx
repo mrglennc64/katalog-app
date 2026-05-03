@@ -1,20 +1,21 @@
 import Link from "next/link";
-import { signIn } from "@/lib/auth";
-import { LoginButton } from "./LoginButton";
+import { LoginForm } from "./LoginForm";
 
-const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
+type SearchParams = { err?: string };
 
-async function loginAction(formData: FormData) {
-  "use server";
-  const email = String(formData.get("email") || "").trim();
-  if (!email.includes("@")) return;
-  await signIn("nodemailer", {
-    email,
-    redirectTo: `${APP_BASE_PATH}/kataloghub`,
-  });
-}
+const ERROR_MESSAGES: Record<string, string> = {
+  missing_token: "Inloggningslänk saknas.",
+  invalid_token: "Inloggningslänken är ogiltig eller har gått ut. Begär en ny.",
+};
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const errMsg = params.err ? ERROR_MESSAGES[params.err] : null;
+
   return (
     <main className="min-h-screen bg-bg p-6">
       <div className="mx-auto max-w-md rounded-lg border border-border bg-bg p-6 shadow-sm">
@@ -23,26 +24,16 @@ export default function LoginPage() {
           Filbaserad validering · Ingen systemåtkomst · Ingen integration
         </p>
 
-        <form action={loginAction} className="space-y-3">
-          <label className="block text-sm">
-            <span className="block text-xs uppercase tracking-wide text-text-muted">
-              E-post
-            </span>
-            <input
-              name="email"
-              className="mt-1 w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text outline-none focus:border-text-muted"
-              type="email"
-              placeholder="namn@exempel.se"
-              autoFocus
-              required
-            />
-          </label>
+        {errMsg && (
+          <p className="mb-4 rounded border border-kh-red/40 bg-kh-red/5 px-3 py-2 text-sm text-kh-red">
+            {errMsg}
+          </p>
+        )}
 
-          <LoginButton />
-        </form>
+        <LoginForm />
 
         <p className="mt-3 text-[11px] text-text-muted">
-          Vi skickar en inloggningslänk till din e-post. Endast verifierade
+          Vi skickar en inloggningslänk till din e-post. Endast godkända
           publicister kan logga in.
         </p>
 

@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { addPendingUser } from "@/lib/auth-store";
+
+const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
 
 async function requestAccess(formData: FormData) {
   "use server";
@@ -8,8 +12,12 @@ async function requestAccess(formData: FormData) {
   const email = String(formData.get("email") || "").trim();
   const phone = String(formData.get("phone") || "").trim();
 
-  // For now: log on the server. Wire to Resend/SMTP -> support@kataloghub.se in next iteration.
+  if (!orgnr || !company || !name || !email.includes("@")) return;
+
+  addPendingUser({ org_number: orgnr, company, email });
   console.log("[signup-request]", { orgnr, company, name, email, phone, ts: new Date().toISOString() });
+
+  redirect(`${APP_BASE_PATH}/signup-request/sent`);
 }
 
 export default function SignupRequestPage() {
