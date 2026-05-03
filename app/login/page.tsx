@@ -18,27 +18,10 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen bg-bg p-6">
       <div className="mx-auto max-w-md rounded-lg border border-border bg-bg p-6 shadow-sm">
-        <h1 className="mb-1 text-2xl font-semibold text-text">Logga in med BankID</h1>
+        <h1 className="mb-1 text-2xl font-semibold text-text">Logga in</h1>
         <p className="mb-5 text-xs text-text-muted">
           Filbaserad validering · Ingen systemåtkomst · Ingen integration
         </p>
-
-        <button
-          type="button"
-          disabled
-          className="mb-2 w-full cursor-not-allowed rounded-full bg-kh-orange/40 px-4 py-2.5 text-sm font-semibold text-white"
-        >
-          Starta BankID-inloggning
-        </button>
-        <p className="mb-6 text-[11px] text-text-muted">
-          BankID-inloggning kommer snart. Använd e-postlänk tillsvidare.
-        </p>
-
-        <div className="mb-3 flex items-center gap-3 text-[11px] uppercase tracking-wide text-text-muted">
-          <span className="h-px flex-1 bg-border" />
-          <span>Inloggning via e-post</span>
-          <span className="h-px flex-1 bg-border" />
-        </div>
 
         <form action={loginAction} className="space-y-3">
           <label className="block text-sm">
@@ -57,6 +40,11 @@ export default function LoginPage() {
 
           <LoginButton />
         </form>
+
+        <p className="mt-3 text-[11px] text-text-muted">
+          Vi skickar en inloggningslänk till din e-post. Endast verifierade
+          publicister kan logga in.
+        </p>
 
         <hr className="my-6 border-border" />
 
@@ -77,6 +65,10 @@ export default function LoginPage() {
             support@kataloghub.se
           </a>
           .
+        </p>
+
+        <p className="mt-4 text-[11px] text-text-muted">
+          BankID-inloggning planeras i kommande fas.
         </p>
       </div>
     </main>

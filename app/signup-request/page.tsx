@@ -20,8 +20,9 @@ export default function SignupRequestPage() {
           Begär åtkomst till Kataloghub
         </h1>
         <p className="mb-5 text-sm text-text-muted">
-          Fyll i dina uppgifter så kontaktar vi dig. Endast verifierade
-          publicister får åtkomst.
+          Fyll i dina uppgifter. Vi kontrollerar organisationsnumret och
+          godkänner din åtkomst manuellt. Endast verifierade publicister
+          loggas in.
         </p>
 
         <form action={requestAccess} className="space-y-4">
