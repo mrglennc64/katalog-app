@@ -27,9 +27,9 @@ export async function GET(
   }
 
   return NextResponse.json([
-    { issue_id: "I-001", work_id: "W-001", field: "writer_ipi", original: "1234567", suggested: "00712984310" },
-    { issue_id: "I-002", work_id: "W-007", field: "writer_ipi", original: "", suggested: "00111222333" },
-    { issue_id: "I-003", work_id: "W-011", field: "role_code", original: "WR", suggested: "CA" },
-    { issue_id: "I-004", work_id: "W-005", field: "share", original: "60", suggested: "50" },
+    { issue_id: "I-001", work_id: "W-001", field: "writer_ipi", original_value: "1234567",  suggested_value: "00712984310", decision: "", notes: "" },
+    { issue_id: "I-002", work_id: "W-007", field: "writer_ipi", original_value: "",         suggested_value: "00111222333", decision: "", notes: "" },
+    { issue_id: "I-003", work_id: "W-011", field: "role_code",  original_value: "WR",       suggested_value: "CA",          decision: "", notes: "" },
+    { issue_id: "I-004", work_id: "W-005", field: "share",      original_value: "60",       suggested_value: "50",          decision: "", notes: "" },
   ]);
 }

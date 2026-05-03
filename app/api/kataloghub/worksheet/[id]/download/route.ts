@@ -29,7 +29,7 @@ export async function GET(
   }
 
   const fallback = [
-    "issue_id,work_id,field,original,suggested,decision,notes",
+    "issue_id,work_id,field,original_value,suggested_value,decision,notes",
     "I-001,W-001,writer_ipi,1234567,00712984310,,",
     "I-002,W-007,writer_ipi,,00111222333,,",
     "I-003,W-011,role_code,WR,CA,,",

@@ -9,8 +9,10 @@ type WorksheetRow = {
   issue_id: string;
   work_id: string;
   field: string;
-  original: string;
-  suggested: string;
+  original_value: string;
+  suggested_value: string;
+  decision?: string;
+  notes?: string;
 };
 
 import { apiFetcher, apiUrl } from "@/lib/api";
@@ -31,7 +33,7 @@ export default function WorksheetPage({
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;
-  if (error || !data) return <p className="text-sm text-kh-red">Kunde inte ladda kalkylblad.</p>;
+  if (error || !data) return <p className="text-sm text-kh-red">Kunde inte ladda arbetsbladet.</p>;
 
   return (
     <>
@@ -52,15 +54,17 @@ export default function WorksheetPage({
               <tr className="border-b border-border text-left text-[11px] uppercase tracking-wide text-text-muted">
                 <th className="py-2 pr-3 font-semibold">issue_id</th>
                 <th className="py-2 pr-3 font-semibold">work_id</th>
-                <th className="py-2 pr-3 font-semibold">fält</th>
-                <th className="py-2 pr-3 font-semibold">original</th>
-                <th className="py-2 font-semibold">förslag</th>
+                <th className="py-2 pr-3 font-semibold">field</th>
+                <th className="py-2 pr-3 font-semibold">original_value</th>
+                <th className="py-2 pr-3 font-semibold">suggested_value</th>
+                <th className="py-2 pr-3 font-semibold">decision</th>
+                <th className="py-2 font-semibold">notes</th>
               </tr>
             </thead>
             <tbody>
               {data.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-4 text-center text-kh-green">
+                  <td colSpan={7} className="py-4 text-center text-kh-green">
                     Inga avvikelser identifierade.
                   </td>
                 </tr>
@@ -70,8 +74,10 @@ export default function WorksheetPage({
                     <td className="py-2 pr-3 font-mono text-xs text-text-muted">{row.issue_id}</td>
                     <td className="py-2 pr-3 font-mono text-xs text-kh-green">{row.work_id}</td>
                     <td className="py-2 pr-3 font-mono text-xs text-text">{row.field}</td>
-                    <td className="py-2 pr-3 font-mono text-xs text-text-muted">{row.original || "—"}</td>
-                    <td className="py-2 font-mono text-xs text-text">{row.suggested}</td>
+                    <td className="py-2 pr-3 font-mono text-xs text-text-muted">{row.original_value || "—"}</td>
+                    <td className="py-2 pr-3 font-mono text-xs text-text">{row.suggested_value}</td>
+                    <td className="py-2 pr-3 font-mono text-xs text-text-muted">{row.decision || "—"}</td>
+                    <td className="py-2 font-mono text-xs text-text-muted">{row.notes || "—"}</td>
                   </tr>
                 ))
               )}
@@ -84,7 +90,7 @@ export default function WorksheetPage({
             href={apiUrl(`/api/kataloghub/worksheet/${id}/download`)}
             className="rounded-full bg-kh-orange px-4 py-2 text-sm font-semibold text-white hover:bg-kh-orange-dark"
           >
-            Ladda ner kalkylblad (CSV)
+            Ladda ner arbetsblad (CSV)
           </a>
           <a
             href={`${HEYROYA_URL}?catalog=${encodeURIComponent(id)}`}
@@ -99,6 +105,31 @@ export default function WorksheetPage({
             Tillbaka till scan
           </Link>
         </div>
+      </Card>
+
+      <Card title="Så fyller du i arbetsbladet" className="mt-4">
+        <ul className="space-y-1.5 text-sm text-text">
+          <li>· Behåll kolumnnamn och ordning.</li>
+          <li>
+            · Fyll endast i kolumnen <code className="font-mono text-xs">decision</code> och vid behov <code className="font-mono text-xs">notes</code>.
+          </li>
+          <li>· Spara som CSV (kommaavgränsad).</li>
+          <li>· Ändra inte filformatet till XLSX när du ska skicka tillbaka till HeyRoya.</li>
+        </ul>
+        <p className="mt-3 text-xs text-text-muted">
+          Tillåtna värden i <code className="font-mono">decision</code>:{" "}
+          <code className="font-mono">approve</code> ·{" "}
+          <code className="font-mono">reject</code> ·{" "}
+          <code className="font-mono">defer</code>.
+        </p>
+        <p className="mt-3">
+          <Link
+            href="/kataloghub/how-to"
+            className="text-sm font-medium text-kh-orange-dark underline hover:text-kh-orange"
+          >
+            Läs hela vägledningen →
+          </Link>
+        </p>
       </Card>
     </>
   );
