@@ -4,6 +4,8 @@ import { use } from "react";
 import useSWR from "swr";
 import Link from "next/link";
 import { Card } from "@/app/components/Card";
+import { apiFetcher, apiUrl } from "@/lib/api";
+import { StepIndicator, PIPELINE_STEPS } from "@/app/components/StepIndicator";
 
 type WorksheetRow = {
   issue_id: string;
@@ -15,11 +17,8 @@ type WorksheetRow = {
   notes?: string;
 };
 
-import { apiFetcher, apiUrl } from "@/lib/api";
-import { StepIndicator, PIPELINE_STEPS } from "@/app/components/StepIndicator";
-
-const HEYROYA_URL =
-  process.env.NEXT_PUBLIC_HEYROYA_URL || "https://heyroya.se/queue";
+const HEYROYA_UPLOAD_URL =
+  process.env.NEXT_PUBLIC_HEYROYA_UPLOAD_URL || "https://upload.heyroya.se/";
 
 export default function WorksheetPage({
   params,
@@ -33,7 +32,8 @@ export default function WorksheetPage({
   );
 
   if (isLoading) return <p className="text-sm text-text-muted">Laddar…</p>;
-  if (error || !data) return <p className="text-sm text-kh-red">Kunde inte ladda arbetsbladet.</p>;
+  if (error || !data)
+    return <p className="text-sm text-kh-red">Kunde inte ladda arbetsbladet.</p>;
 
   return (
     <>
@@ -47,7 +47,50 @@ export default function WorksheetPage({
         <p className="mt-1 font-mono text-xs text-text-muted">Scan-ID: {id}</p>
       </header>
 
-      <Card title={`Avvikelser (${data.length} rader)`}>
+      <Card title="Så fyller du i arbetsbladet">
+        <ul className="space-y-1.5 text-sm text-text">
+          <li>· Behåll kolumnnamn och ordning exakt som de är.</li>
+          <li>
+            · Fyll endast i kolumnen{" "}
+            <code className="font-mono text-xs">decision</code> och vid behov{" "}
+            <code className="font-mono text-xs">notes</code>.
+          </li>
+          <li>
+            · Godkända värden: <code className="font-mono">approve</code>,{" "}
+            <code className="font-mono">reject</code>,{" "}
+            <code className="font-mono">defer</code>.
+          </li>
+          <li>· Spara som CSV (kommaavgränsad) — inte XLSX.</li>
+          <li>
+            · Skicka tillbaka till HeyRoya genom att ladda upp originalfilen +
+            detta arbetsblad på{" "}
+            <a
+              href={HEYROYA_UPLOAD_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-kh-orange-dark underline hover:text-kh-orange"
+            >
+              upload.heyroya.se
+            </a>
+            .
+          </li>
+        </ul>
+        <p className="mt-3 text-[11px] text-text-muted">
+          Numeriska identifierare (writer_ipi, iswc, isrc) genereras med
+          inledande apostrof <code className="font-mono">&apos;</code> så Excel
+          inte konverterar dem till vetenskapligt format.
+        </p>
+        <p className="mt-2">
+          <Link
+            href="/kataloghub/how-to"
+            className="text-sm font-medium text-kh-orange-dark underline hover:text-kh-orange"
+          >
+            Läs hela vägledningen →
+          </Link>
+        </p>
+      </Card>
+
+      <Card title={`Avvikelser (${data.length} rader)`} className="mt-4">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -70,7 +113,10 @@ export default function WorksheetPage({
                 </tr>
               ) : (
                 data.map((row) => (
-                  <tr key={row.issue_id} className="border-b border-border last:border-0">
+                  <tr
+                    key={row.issue_id}
+                    className="border-b border-border last:border-0"
+                  >
                     <td className="py-2 pr-3 font-mono text-xs text-text-muted">{row.issue_id}</td>
                     <td className="py-2 pr-3 font-mono text-xs text-kh-green">{row.work_id}</td>
                     <td className="py-2 pr-3 font-mono text-xs text-text">{row.field}</td>
@@ -93,10 +139,12 @@ export default function WorksheetPage({
             Ladda ner arbetsblad (CSV)
           </a>
           <a
-            href={`${HEYROYA_URL}?catalog=${encodeURIComponent(id)}`}
+            href={HEYROYA_UPLOAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-full border border-border bg-bg px-4 py-2 text-sm font-medium text-text hover:border-text-muted"
           >
-            Skicka till HeyRoya →
+            Öppna HeyRoya för att ladda upp filer →
           </a>
           <Link
             href={`/kataloghub/scan/${id}`}
@@ -105,30 +153,19 @@ export default function WorksheetPage({
             Tillbaka till scan
           </Link>
         </div>
-      </Card>
 
-      <Card title="Så fyller du i arbetsbladet" className="mt-4">
-        <ul className="space-y-1.5 text-sm text-text">
-          <li>· Behåll kolumnnamn och ordning.</li>
-          <li>
-            · Fyll endast i kolumnen <code className="font-mono text-xs">decision</code> och vid behov <code className="font-mono text-xs">notes</code>.
-          </li>
-          <li>· Spara som CSV (kommaavgränsad).</li>
-          <li>· Ändra inte filformatet till XLSX när du ska skicka tillbaka till HeyRoya.</li>
-        </ul>
         <p className="mt-3 text-xs text-text-muted">
-          Tillåtna värden i <code className="font-mono">decision</code>:{" "}
-          <code className="font-mono">approve</code> ·{" "}
-          <code className="font-mono">reject</code> ·{" "}
-          <code className="font-mono">defer</code>.
-        </p>
-        <p className="mt-3">
-          <Link
-            href="/kataloghub/how-to"
-            className="text-sm font-medium text-kh-orange-dark underline hover:text-kh-orange"
+          Du skickar arbetsbladet till HeyRoya genom att ladda upp originalfilen
+          och den korrigerade filen på{" "}
+          <a
+            href={HEYROYA_UPLOAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-kh-orange-dark underline hover:text-kh-orange"
           >
-            Läs hela vägledningen →
-          </Link>
+            upload.heyroya.se
+          </a>
+          .
         </p>
       </Card>
     </>
