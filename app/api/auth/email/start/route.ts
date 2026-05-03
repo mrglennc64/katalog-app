@@ -5,18 +5,10 @@ import {
   createMagicToken,
 } from "@/lib/auth-store";
 import { sendMagicLink } from "@/lib/auth-mail";
+import { publicOrigin } from "@/lib/auth-origin";
 
 const APP_BASE_PATH = process.env.KATALOGHUB_BASEPATH || "";
 const PUBLIC_DEV_LINK = process.env.NODE_ENV !== "production";
-
-function originFromRequest(req: Request): string {
-  const proto = req.headers.get("x-forwarded-proto") || "http";
-  const host =
-    req.headers.get("x-forwarded-host") ||
-    req.headers.get("host");
-  if (host) return `${proto}://${host}`;
-  return new URL(req.url).origin;
-}
 
 export async function POST(req: Request) {
   let body: { org_number?: string; email?: string };
@@ -52,8 +44,7 @@ export async function POST(req: Request) {
   }
 
   const token = createMagicToken(publisher.publisher_id, email);
-  const origin = originFromRequest(req);
-  const url = `${origin}${APP_BASE_PATH}/api/auth/email/verify?token=${token}`;
+  const url = `${publicOrigin(req)}${APP_BASE_PATH}/api/auth/email/verify?token=${token}`;
 
   const sent = await sendMagicLink({ to: email, url });
 
