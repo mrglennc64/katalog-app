@@ -4,20 +4,34 @@ import useSWR from "swr";
 import Link from "next/link";
 import { Card } from "@/app/components/Card";
 import { Pill } from "@/app/components/Pill";
+import { apiFetcher } from "@/lib/api";
 
 type Dashboard = {
+  // Company
+  companyName: string;
+  orgnr: string;
+  activePlan: string;
+  monthlyFee: number;
+
+  // Usage
+  validationsThisMonth: number;
+  pendingCorrections: number;
+
+  // Billing
+  currentPeriod: string;
+  billingAmount: number;
+  billingStatus: string;
+
+  // Existing widgets
   pendingScans: number;
   completedReports: number;
   pendingWorksheets: number;
   totalScans: number;
   lastScan: string;
   avgHealth: number;
-  pricePerScan: number;
-  companyName: string;
-  orgnr: string;
 };
 
-import { apiFetcher } from "@/lib/api";
+const fmtSEK = (n: number) => n.toLocaleString("sv-SE") + " SEK";
 
 export default function DashboardPage() {
   const { data, error, isLoading } = useSWR<Dashboard>(
@@ -44,15 +58,11 @@ export default function DashboardPage() {
           </p>
         </header>
         <Card>
-          <p className="text-sm text-kh-red">
-            Kunde inte ladda data.
-          </p>
+          <p className="text-sm text-kh-red">Kunde inte ladda data.</p>
         </Card>
       </>
     );
   }
-
-  const billingTotal = data.pricePerScan * data.totalScans;
 
   return (
     <>
@@ -107,24 +117,52 @@ export default function DashboardPage() {
         </Card>
       </section>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-2">
-        <Card title="Företaget">
-          <ul className="space-y-1 text-sm text-text">
-            <li>Totala skanningar: {data.totalScans}</li>
-            <li>Väntar korrigering: {data.pendingWorksheets}</li>
-          </ul>
+      <section className="mt-6 grid gap-4 md:grid-cols-3">
+        <Card title="Företag">
+          <dl className="space-y-1.5 text-sm">
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Aktiv plan</dt>
+              <dd className="font-medium text-text">{data.activePlan}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Månadsavgift</dt>
+              <dd className="font-medium text-text">{fmtSEK(data.monthlyFee)}</dd>
+            </div>
+          </dl>
+        </Card>
+
+        <Card title="Användning">
+          <dl className="space-y-1.5 text-sm">
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Valideringar denna månad</dt>
+              <dd className="font-medium text-text">{data.validationsThisMonth}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Väntar korrigering</dt>
+              <dd className="font-medium text-text">{data.pendingCorrections}</dd>
+            </div>
+          </dl>
         </Card>
 
         <Card title="Fakturering">
-          <p className="text-sm text-text-muted">
-            Pris per skanning: <strong className="text-text">{data.pricePerScan} SEK</strong>
-          </p>
-          <p className="mt-1 text-sm text-text-muted">
-            Antal skanningar: <strong className="text-text">{data.totalScans}</strong>
-          </p>
-          <p className="mt-2 text-base font-semibold text-text">
-            Total: {billingTotal.toLocaleString("sv-SE")} SEK
-          </p>
+          <dl className="space-y-1.5 text-sm">
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Aktuell period</dt>
+              <dd className="font-medium text-text">{data.currentPeriod}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Belopp</dt>
+              <dd className="font-medium text-text">{fmtSEK(data.billingAmount)}</dd>
+            </div>
+            <div className="flex justify-between">
+              <dt className="text-text-muted">Status</dt>
+              <dd>
+                <Pill tone={data.billingStatus === "Not invoiced" ? "yellow" : "green"}>
+                  {data.billingStatus}
+                </Pill>
+              </dd>
+            </div>
+          </dl>
         </Card>
       </section>
     </>
