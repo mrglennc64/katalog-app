@@ -7,27 +7,19 @@ type NavItem = {
   href: string;
   label: string;
   exact?: boolean;
-  children?: { href: string; label: string }[];
 };
 
-const NAV: NavItem[] = [
-  { href: "/kataloghub", label: "Dashboard", exact: true },
-  { href: "/kataloghub/upload", label: "1. Ladda upp katalog" },
-  {
-    href: "/kataloghub/scans",
-    label: "2. Skanningar",
-    children: [{ href: "/kataloghub/scans", label: "Skanningshistorik" }],
-  },
-  {
-    href: "/kataloghub/scans",
-    label: "3. Scan-resultat & hälsorapporter",
-    children: [
-      { href: "/kataloghub/scans", label: "Scan-resultat" },
-      { href: "/kataloghub/scans", label: "Hälsorapporter" },
-    ],
-  },
-  { href: "/kataloghub/worksheets", label: "4. Arbetsblad" },
-  { href: "/kataloghub/tasks", label: "5. Uppgifter / Att åtgärda senare" },
+// Operator's main workflow lives entirely on the upload page:
+// upload file → start validation → download CSV → send to HeyRoya.
+// Everything else is secondary.
+const PRIMARY: NavItem[] = [
+  { href: "/kataloghub/upload", label: "Ladda upp katalog" },
+];
+
+const SECONDARY: NavItem[] = [
+  { href: "/kataloghub/scan-history", label: "Skanningshistorik" },
+  { href: "/kataloghub/health-report", label: "Hälsorapporter" },
+  { href: "/kataloghub/tasks", label: "Uppgifter / Att åtgärda senare" },
   { href: "/kataloghub/exports", label: "Exporter" },
   { href: "/kataloghub/limits", label: "Skanningsgränser" },
   { href: "/kataloghub/billing", label: "Fakturering" },
@@ -41,6 +33,7 @@ function isActive(pathname: string | null, href: string, exact?: boolean) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const secondaryActive = SECONDARY.some((i) => isActive(pathname, i.href));
 
   return (
     <aside className="w-64 shrink-0 border-r border-border bg-bg p-4">
@@ -54,55 +47,63 @@ export function Sidebar() {
         </span>
       </div>
 
-      <nav className="flex flex-col gap-0.5">
-        {NAV.map((item) => {
-          const active = isActive(pathname, item.href, item.exact);
-          const hasChildren = item.children && item.children.length > 0;
-          const groupActive =
-            active ||
-            (item.children?.some((c) => isActive(pathname, c.href)) ?? false);
+      <Link
+        href="/kataloghub"
+        className={`mb-3 block rounded px-3 py-2 text-sm transition-colors ${
+          isActive(pathname, "/kataloghub", true)
+            ? "bg-kh-orange/10 font-semibold text-kh-orange-dark"
+            : "text-text-muted hover:bg-surface hover:text-text"
+        }`}
+      >
+        Dashboard
+      </Link>
 
+      <nav className="flex flex-col gap-0.5">
+        {PRIMARY.map((item) => {
+          const active = isActive(pathname, item.href, item.exact);
           return (
-            <div key={item.label}>
-              <Link
-                href={item.href}
-                className={`block rounded px-3 py-2 text-sm transition-colors ${
-                  groupActive && !hasChildren
-                    ? "bg-kh-orange/10 font-semibold text-kh-orange-dark"
-                    : groupActive && hasChildren
-                      ? "font-semibold text-text"
-                      : "text-text hover:bg-surface"
-                }`}
-              >
-                {item.label}
-              </Link>
-              {hasChildren && (
-                <div className="mt-0.5 ml-3 flex flex-col gap-0.5 border-l border-border pl-2">
-                  {item.children!.map((child, i) => {
-                    const childActive = isActive(pathname, child.href);
-                    return (
-                      <Link
-                        key={`${child.label}-${i}`}
-                        href={child.href}
-                        className={`block rounded px-3 py-1.5 text-[13px] transition-colors ${
-                          childActive
-                            ? "bg-kh-orange/10 font-semibold text-kh-orange-dark"
-                            : "text-text-muted hover:bg-surface hover:text-text"
-                        }`}
-                      >
-                        {child.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`block rounded px-3 py-2 text-sm transition-colors ${
+                active
+                  ? "bg-kh-orange/10 font-semibold text-kh-orange-dark"
+                  : "text-text hover:bg-surface"
+              }`}
+            >
+              {item.label}
+            </Link>
           );
         })}
       </nav>
 
+      <details className="mt-6 group" open={secondaryActive}>
+        <summary className="cursor-pointer list-none px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-text-muted hover:text-text">
+          <span className="inline-block w-3 transition-transform group-open:rotate-90">›</span>{" "}
+          Verktyg &amp; inställningar
+        </summary>
+        <nav className="mt-1 flex flex-col gap-0.5">
+          {SECONDARY.map((item) => {
+            const active = isActive(pathname, item.href, item.exact);
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`block rounded px-3 py-1.5 text-[13px] transition-colors ${
+                  active
+                    ? "bg-kh-orange/10 font-semibold text-kh-orange-dark"
+                    : "text-text-muted hover:bg-surface hover:text-text"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </details>
+
       <div className="mt-8 px-3 text-[11px] leading-relaxed text-text-muted">
-        Filbaserat · Ingen systemåtkomst · Ingen ingestion
+        Filbaserat · Ingen systemåtkomst
       </div>
     </aside>
   );
